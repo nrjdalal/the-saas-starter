@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -8,23 +8,9 @@
     "drizzle": "bun --env-file=.env.development drizzle-kit push",
     "drizzle:prod": "bun --env-file=.env.production drizzle-kit push",
     "lint": "eslint",
-    "prepare": "npx simple-git-hooks",
     "start": "next start",
     "studio": "bun --env-file=.env.development drizzle-kit studio",
     "studio:prod": "bun --env-file=.env.production drizzle-kit studio"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged --verbose",
-    "commit-msg": "npx commitlint --edit $1"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "lint-staged": {
-    "*": "prettier --write --ignore-unknown",
-    "package.json": "sort-package-json"
   },
   "prettier": {
     "importOrder": [
@@ -84,8 +70,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@commitlint/cli": "catalog:",
-    "@commitlint/config-conventional": "catalog:",
     "@fontsource-variable/dm-sans": "catalog:",
     "@fontsource-variable/jetbrains-mono": "catalog:",
     "@ianvs/prettier-plugin-sort-imports": "catalog:",
@@ -98,11 +82,7 @@
     "drizzle-kit": "catalog:",
     "eslint": "catalog:",
     "eslint-config-next": "catalog:",
-    "lint-staged": "catalog:",
-    "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
-    "simple-git-hooks": "catalog:",
-    "sort-package-json": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:"
