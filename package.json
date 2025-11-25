@@ -1,8 +1,14 @@
 {
+  "name": "the-saas-starter",
+  "version": "0.0.1",
+  "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "prepare": "npx simple-git-hooks"
+  },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged --verbose",
     "commit-msg": "npx commitlint --edit $1"
