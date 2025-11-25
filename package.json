@@ -19,7 +19,10 @@
     ]
   },
   "lint-staged": {
-    "*": "prettier --write --ignore-unknown",
+    "*": [
+      "oxlint",
+      "prettier --write --ignore-unknown"
+    ],
     "package.json": "sort-package-json"
   },
   "prettier": {
@@ -30,6 +33,7 @@
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
     "lint-staged": "catalog:",
+    "oxlint": "catalog:",
     "prettier": "catalog:",
     "simple-git-hooks": "catalog:",
     "sort-package-json": "catalog:",
@@ -40,6 +44,7 @@
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "lint-staged": "^16.2.7",
+    "oxlint": "^1.30.0",
     "prettier": "^3.6.2",
     "simple-git-hooks": "^2.13.1",
     "sort-package-json": "^3.4.0",
