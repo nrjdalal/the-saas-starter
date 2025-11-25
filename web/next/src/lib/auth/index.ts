@@ -1,41 +1,19 @@
-import { db } from "@/db"
-import { betterAuth } from "better-auth"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { nextCookies } from "better-auth/next-js"
-import { magicLink } from "better-auth/plugins"
-import { Resend } from "resend"
-
-import { account, session, user, verification } from "@/db/schema/auth"
-
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    schema: {
-      user,
-      session,
-      account,
-      verification,
-    },
-  }),
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+export const auth = {
+  api: {
+    getSession: async ({ headers }: { headers: Headers }) => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/get-session`, {
+          headers,
+          cache: "no-store",
+        })
+        if (!response.ok) {
+          return null
+        }
+        return await response.json()
+      } catch (error) {
+        console.error("Failed to fetch session:", error)
+        return null
+      }
     },
   },
-  plugins: [
-    nextCookies(),
-    magicLink({
-      sendMagicLink: async ({ email, url }) => {
-        const resend = new Resend(process.env.RESEND_API_KEY as string)
-
-        await resend.emails.send({
-          from: "ACME Inc. <onboarding@tns.nrjdalal.com>",
-          to: [email],
-          subject: "Verify your email address",
-          html: `Click the link to verify your email: ${url}`,
-        })
-      },
-    }),
-  ],
-})
+}

@@ -4,9 +4,14 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "hono": "catalog:"
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "postgres": "catalog:",
+    "resend": "catalog:"
   },
   "devDependencies": {
-    "@types/bun": "catalog:"
+    "@types/bun": "catalog:",
+    "drizzle-kit": "catalog:"
   }
 }

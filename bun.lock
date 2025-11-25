@@ -18,10 +18,15 @@
     "api/hono": {
       "name": "hono",
       "dependencies": {
+        "better-auth": "catalog:",
+        "drizzle-orm": "catalog:",
         "hono": "catalog:",
+        "postgres": "catalog:",
+        "resend": "catalog:",
       },
       "devDependencies": {
         "@types/bun": "catalog:",
+        "drizzle-kit": "catalog:",
       },
     },
     "web/next": {
@@ -37,13 +42,11 @@
         "clsx": "catalog:",
         "cmdk": "catalog:",
         "date-fns": "catalog:",
-        "drizzle-orm": "catalog:",
         "embla-carousel-react": "catalog:",
         "input-otp": "catalog:",
         "lucide-react": "catalog:",
         "next": "catalog:",
         "next-themes": "catalog:",
-        "postgres": "catalog:",
         "radix-ui": "catalog:",
         "react": "catalog:",
         "react-day-picker": "catalog:",
@@ -67,7 +70,6 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "babel-plugin-react-compiler": "catalog:",
-        "drizzle-kit": "catalog:",
         "prettier-plugin-tailwindcss": "catalog:",
         "tailwindcss": "catalog:",
         "tw-animate-css": "catalog:",
