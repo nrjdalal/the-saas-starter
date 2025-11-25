@@ -1,5 +1,5 @@
 {
-  "name": "next",
+  "name": "@web/next",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -43,6 +43,7 @@
     "semi": false
   },
   "dependencies": {
+    "@api/hono": "workspace:*",
     "@hookform/resolvers": "catalog:",
     "@remixicon/react": "catalog:",
     "@tanstack/react-form": "catalog:",
@@ -53,6 +54,7 @@
     "cmdk": "catalog:",
     "date-fns": "catalog:",
     "embla-carousel-react": "catalog:",
+    "hono": "catalog:",
     "input-otp": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",
