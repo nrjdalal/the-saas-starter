@@ -3,8 +3,11 @@ import { cors } from "hono/cors"
 import { auth } from "@/lib/auth"
 import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
+import { logger } from "hono/logger"
 
 const app = new Hono().basePath("/api")
+
+app.use(logger())
 
 app.use(
   "/auth/*",
