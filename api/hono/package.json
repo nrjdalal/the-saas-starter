@@ -25,6 +25,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@packages/tsconfig": "workspace:*",
     "@types/bun": "catalog:",
     "concurrently": "catalog:",
     "drizzle-kit": "catalog:",

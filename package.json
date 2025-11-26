@@ -4,6 +4,7 @@
   "private": true,
   "workspaces": [
     "api/*",
+    "packages/*",
     "web/*"
   ],
   "scripts": {
