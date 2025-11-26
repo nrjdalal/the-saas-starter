@@ -24,6 +24,9 @@ app.use(
 )
 
 const routes = app
+  .get("/health", (c) => {
+    return c.text("OK")
+  })
   .get(
     "/auth/get-session",
     zValidator(
@@ -60,9 +63,6 @@ const routes = app
     },
   )
   .on(["GET", "POST"], "/auth/*", (c) => auth.handler(c.req.raw))
-  .get("/", (c) => {
-    return c.text("Hello Hono!")
-  })
 
 export type { User, Session } from "@/lib/auth"
 export type AppType = typeof routes

@@ -1,7 +1,7 @@
 import { db } from "@/db"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { magicLink } from "better-auth/plugins"
+import { magicLink, openAPI } from "better-auth/plugins"
 import { Resend } from "resend"
 
 import { account, session, user, verification } from "@/db/schema/auth"
@@ -37,6 +37,7 @@ export const auth = betterAuth({
         })
       },
     }),
+    openAPI(),
   ],
 })
 
