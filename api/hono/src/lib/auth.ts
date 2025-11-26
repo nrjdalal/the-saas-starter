@@ -7,8 +7,8 @@ import { Resend } from "resend"
 import { account, session, user, verification } from "@/db/schema/auth"
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_WEB_URL as string,
-  trustedOrigins: [process.env.BETTER_AUTH_WEB_URL as string],
+  baseURL: process.env.HONO_PUBLIC_APP_URL as string,
+  trustedOrigins: [...(process.env.TRUSTED_ORIGINS ? process.env.TRUSTED_ORIGINS.split(",") : [])],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {

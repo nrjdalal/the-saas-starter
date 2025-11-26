@@ -40,7 +40,7 @@ export default function Component() {
       setLoader("email")
       const res = await signIn.magicLink({
         email: value.email,
-        callbackURL: "/x",
+        callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/x`,
       })
       if (res.error) {
         toast.error(res.error.message)
@@ -138,7 +138,7 @@ export default function Component() {
                 setLoader("github")
                 const res = await signIn.social({
                   provider: "github",
-                  callbackURL: "/x",
+                  callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/x`,
                 })
                 if (res.error) {
                   toast.error(res.error.message)
@@ -162,7 +162,7 @@ export default function Component() {
                 setLoader("google")
                 const res = await signIn.social({
                   provider: "google",
-                  callbackURL: "/x",
+                  callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/x`,
                 })
                 if (res.error) {
                   toast.error(res.error.message)
