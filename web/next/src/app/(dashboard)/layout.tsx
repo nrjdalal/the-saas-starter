@@ -17,9 +17,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     headers: await headers(),
   })
 
-  if (!session?.user) {
-    redirect("/access")
-  }
+  if (!session?.user) redirect("/")
 
   return (
     <SidebarProvider>
