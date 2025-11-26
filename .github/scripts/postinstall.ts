@@ -22,11 +22,37 @@ async function main() {
       absolute: true,
     })
 
-    const usedDependencies = new Set<string>()
+    const dependencyVersions = new Map<string, Set<string>>()
+    const packageJsons = new Map<string, any>()
 
     for (const pPath of packageJsonFiles) {
       const isRoot = pPath === rootPackageJsonPath
       const pPkg = isRoot ? pkg : JSON.parse(fs.readFileSync(pPath, "utf8"))
+      packageJsons.set(pPath, pPkg)
+
+      const depTypes = [
+        "dependencies",
+        "devDependencies",
+        "peerDependencies",
+        "optionalDependencies",
+      ]
+
+      for (const type of depTypes) {
+        if (pPkg[type]) {
+          for (const [dep, version] of Object.entries(pPkg[type] as Record<string, string>)) {
+            if (!dependencyVersions.has(dep)) {
+              dependencyVersions.set(dep, new Set())
+            }
+            dependencyVersions.get(dep)!.add(version)
+          }
+        }
+      }
+    }
+
+    const usedDependencies = new Set<string>()
+
+    for (const pPath of packageJsonFiles) {
+      const pPkg = packageJsons.get(pPath)
       let pPkgModified = false
 
       const depTypes = [
@@ -41,6 +67,8 @@ async function main() {
           for (const [dep, version] of Object.entries(pPkg[type] as Record<string, string>)) {
             usedDependencies.add(dep)
 
+            const versions = dependencyVersions.get(dep)!
+
             const isCatalog = version === "catalog:"
             const isWorkspace = version.startsWith("workspace:")
             const isFile = version.startsWith("file:")
@@ -48,28 +76,45 @@ async function main() {
             const isHttp = version.startsWith("http:") || version.startsWith("https:")
             const isGit = version.startsWith("git:") || version.startsWith("git+")
 
-            if (
-              !isCatalog &&
-              !isWorkspace &&
-              !isFile &&
-              !isLink &&
-              !isHttp &&
-              !isGit &&
-              pkg.catalog
-            ) {
-              if (catalog[dep] !== version) {
-                catalog[dep] = version
-                rootPkgModified = true
+            if (isCatalog || isWorkspace || isFile || isLink || isHttp || isGit) continue
+
+            const nonCatalogVersions = Array.from(versions).filter((v) => v !== "catalog:")
+
+            const hasSpecialProtocol = nonCatalogVersions.some(
+              (v) =>
+                v.startsWith("workspace:") ||
+                v.startsWith("file:") ||
+                v.startsWith("link:") ||
+                v.startsWith("http:") ||
+                v.startsWith("https:") ||
+                v.startsWith("git:") ||
+                v.startsWith("git+"),
+            )
+
+            if (hasSpecialProtocol) continue
+
+            if (nonCatalogVersions.length > 1) continue
+
+            const candidateVersion = nonCatalogVersions[0]
+
+            if (versions.has("catalog:")) {
+              if (catalog[dep] && catalog[dep] !== candidateVersion) {
+                continue
               }
-              pPkg[type][dep] = "catalog:"
-              pPkgModified = true
             }
+
+            if (catalog[dep] !== candidateVersion) {
+              catalog[dep] = candidateVersion
+              rootPkgModified = true
+            }
+            pPkg[type][dep] = "catalog:"
+            pPkgModified = true
           }
         }
       }
 
       if (pPkgModified) {
-        if (isRoot) {
+        if (pPath === rootPackageJsonPath) {
           rootPkgModified = true
         } else {
           fs.writeFileSync(pPath, JSON.stringify(pPkg, null, 2) + "\n")
