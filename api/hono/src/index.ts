@@ -31,7 +31,7 @@ const routes = app
       }),
     ),
     async (c) => {
-      const session = await (auth.api.getSession as any)({
+      const session = await auth.api.getSession({
         headers: c.req.raw.headers,
       })
 
