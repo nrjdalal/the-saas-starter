@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "turbo build",
+    "check-types": "turbo check-types",
     "clean": "npx rimraf --glob \"**/.next\" \"**/.turbo\" \"**/dist\" \"**/node_modules\"",
     "dev": "turbo dev",
     "postinstall": "bun .github/scripts/deps-manager.ts",
@@ -26,7 +27,7 @@
   },
   "lint-staged": {
     "*": [
-      "oxlint",
+      "oxlint --fix",
       "prettier --write --ignore-unknown"
     ],
     "package.json": [
