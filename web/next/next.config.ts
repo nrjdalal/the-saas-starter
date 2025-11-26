@@ -10,8 +10,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  // TODO: Make sure this makes any difference
-  transpilePackages: ["@api/hono"],
 }
 
 export default nextConfig

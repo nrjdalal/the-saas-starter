@@ -23,50 +23,49 @@ app.use(
   }),
 )
 
-app.get(
-  "/auth/get-session",
-  zValidator(
-    "query",
-    z.object({
-      select: z.string().optional(),
-    }),
-  ),
-  async (c) => {
-    const session = await auth.api.getSession({ headers: c.req.raw.headers })
+const routes = app
+  .get(
+    "/auth/get-session",
+    zValidator(
+      "query",
+      z.object({
+        select: z.string().optional(),
+      }),
+    ),
+    async (c) => {
+      const session = await auth.api.getSession({ headers: c.req.raw.headers })
 
-    if (!session) {
-      return c.json(null)
-    }
+      if (!session) {
+        return c.json(null)
+      }
 
-    const { select } = c.req.valid("query")
+      const { select } = c.req.valid("query")
 
-    if (!select) {
-      return c.json(session)
-    }
+      if (!select) {
+        return c.json(session)
+      }
 
-    const selections = select.split(",")
-    const result: Partial<typeof session> = {}
+      const selections = select.split(",")
+      const result: Partial<typeof session> = {}
 
-    if (selections.includes("user")) {
-      result.user = session.user
-    }
+      if (selections.includes("user")) {
+        result.user = session.user
+      }
 
-    if (selections.includes("session")) {
-      result.session = session.session
-    }
+      if (selections.includes("session")) {
+        result.session = session.session
+      }
 
-    return c.json(result)
-  },
-)
-
-app.on(["GET", "POST"], "/auth/*", (c) => auth.handler(c.req.raw))
-
-app.get("/", (c) => {
-  return c.text("Hello Hono!")
-})
+      return c.json(result)
+    },
+  )
+  .on(["GET", "POST"], "/auth/*", (c) => auth.handler(c.req.raw))
+  .get("/", (c) => {
+    return c.text("Hello Hono!")
+  })
 
 export type { User, Session } from "@/lib/auth"
-export type AppType = typeof app
+export type AppType = typeof routes
 
 export default {
   port: 4000,
