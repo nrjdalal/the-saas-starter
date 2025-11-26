@@ -10,7 +10,7 @@
     "build": "turbo build",
     "clean": "npx rimraf --glob \"**/.next\" \"**/.turbo\" \"**/dist\" \"**/node_modules\"",
     "dev": "turbo dev",
-    "postinstall": "bun .github/scripts/postinstall.ts",
+    "postinstall": "bun .github/scripts/deps-manager.ts",
     "lint": "turbo lint",
     "prepare": "npx simple-git-hooks"
   },
@@ -29,7 +29,7 @@
       "prettier --write --ignore-unknown"
     ],
     "package.json": [
-      "bun .github/scripts/postinstall.ts",
+      "bun .github/scripts/deps-manager.ts",
       "sort-package-json"
     ]
   },

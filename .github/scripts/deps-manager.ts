@@ -205,7 +205,7 @@ async function main() {
   if (!unusedCatalog.length && !missingInCatalog.length && safeToMove.size === 0) return
 
   if (safeToMove.size) {
-    console.log("Auto-moved deps to catalog:")
+    console.log("[INFO] Auto-moved deps to catalog:")
     for (const [k, v] of [...safeToMove.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
       console.log(`- ${k}@${v}`)
     }
@@ -213,13 +213,13 @@ async function main() {
   }
 
   if (unusedCatalog.length) {
-    console.log("Unused deps in catalog:")
+    console.log("[INFO] Unused deps in catalog:")
     for (const k of unusedCatalog) console.log(`- ${k}`)
     console.log("")
   }
 
   if (missingInCatalog.length) {
-    console.log("Not safe to auto-move (multiple non-local versions). Please move manually:")
+    console.log("[INFO] Not safe to auto-move. Please move manually:")
     for (const k of missingInCatalog) console.log(`- ${k}`)
     console.log("")
   }
