@@ -2,6 +2,8 @@
 
 Welcome to the SaaS Starter monorepo! This project is a full-stack application built with modern web technologies, organized as a monorepo using [Turborepo](https://turbo.build/).
 
+![Architecture](./.github/assets/graph-build.svg)
+
 ## Tech Stack
 
 ### Core
