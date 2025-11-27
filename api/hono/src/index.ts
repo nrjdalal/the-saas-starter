@@ -1,9 +1,8 @@
 import { Hono } from "hono"
 import { cors } from "hono/cors"
-import { auth } from "@/lib/auth"
-import { zValidator } from "@hono/zod-validator"
-import { z } from "zod"
+
 import { logger } from "hono/logger"
+import { authRouter } from "@/routers/auth"
 
 const app = new Hono().basePath("/api")
 
@@ -25,44 +24,7 @@ const routes = app
   .get("/health", (c) => {
     return c.text("OK")
   })
-  .get(
-    "/auth/get-session",
-    zValidator(
-      "query",
-      z.object({
-        select: z.string().optional(),
-      }),
-    ),
-    async (c) => {
-      const session = await auth.api.getSession({
-        headers: c.req.raw.headers,
-      })
-
-      if (!session) {
-        return c.json(null)
-      }
-
-      const { select } = c.req.valid("query")
-
-      if (!select) {
-        return c.json(session)
-      }
-
-      const selections = select.split(",")
-      const result: Partial<typeof session> = {}
-
-      if (selections.includes("user")) {
-        result.user = session.user
-      }
-
-      if (selections.includes("session")) {
-        result.session = session.session
-      }
-
-      return c.json(result)
-    },
-  )
-  .on(["GET", "POST"], "/auth/*", (c) => auth.handler(c.req.raw))
+  .route("/auth", authRouter)
 
 export type { User, Session } from "@/lib/auth"
 export type AppType = typeof routes
