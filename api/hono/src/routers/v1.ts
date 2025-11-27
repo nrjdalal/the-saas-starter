@@ -1,9 +1,11 @@
 import { Hono } from "hono"
 
 import { authMiddleware } from "@/middlewares/auth"
-import { AppSession, AppUser } from "@/lib/auth"
+import type { Variables } from "@/types"
 
-const app = new Hono<{ Variables: { session: AppSession; user: AppUser } }>()
+const app = new Hono<{
+  Variables: Variables
+}>()
 
 app.use("/*", authMiddleware)
 

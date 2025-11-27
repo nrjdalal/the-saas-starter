@@ -2,8 +2,11 @@ import { Hono } from "hono"
 import { auth } from "@/lib/auth"
 import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
+import type { Variables } from "@/types"
 
-const app = new Hono()
+const app = new Hono<{
+  Variables: Variables
+}>()
 
 export const authRouter = app
   .get(

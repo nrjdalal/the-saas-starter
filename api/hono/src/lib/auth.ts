@@ -40,6 +40,3 @@ export const auth = betterAuth({
     openAPI(),
   ],
 })
-
-export type AppUser = typeof auth.$Infer.Session.user
-export type AppSession = typeof auth.$Infer.Session.session
