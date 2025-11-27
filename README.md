@@ -19,7 +19,6 @@ Welcome to the SaaS Starter monorepo! This project is a full-stack application b
 - **Database ORM:** [Drizzle ORM](https://orm.drizzle.team/)
 - **Database:** PostgreSQL
 - **Authentication:** [Better Auth](https://better-auth.com/)
-- **Email:** [Resend](https://resend.com/)
 - **Validation:** Zod
 
 ### Frontend (`web/next`)
