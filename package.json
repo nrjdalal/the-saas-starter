@@ -10,7 +10,7 @@
   "scripts": {
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "clean": "npx rimraf --glob \"**/.next\" \"**/.turbo\" \"**/dist\" \"**/node_modules\"",
+    "clean": "bunx rimraf --glob \"**/.next\" \"**/.turbo\" \"**/dist\" \"**/node_modules\"",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:push": "turbo db:push",
@@ -18,12 +18,12 @@
     "dev": "turbo dev",
     "postinstall": "bun .github/scripts/deps-manager.ts",
     "lint": "turbo lint",
-    "prepare": "npx simple-git-hooks",
+    "prepare": "bunx simple-git-hooks",
     "start": "turbo start"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged --verbose && bun run build",
-    "commit-msg": "npx commitlint --edit $1"
+    "pre-commit": "bunx lint-staged --verbose && bun run build",
+    "commit-msg": "bunx commitlint --edit $1"
   },
   "commitlint": {
     "extends": [
