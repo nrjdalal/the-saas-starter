@@ -14,13 +14,13 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "production"]).default("development"),
     BETTER_AUTH_SECRET: process.env.CI
-      ? z.string().default("openssl rand -base64 32")
+      ? z.string().default("Generate using `openssl rand -base64 32`")
       : z.string().min(1),
     GITHUB_CLIENT_ID: process.env.CI
-      ? z.string().default("https://github.com/settings/developers")
+      ? z.string().default("Generate at `https://github.com/settings/developers`")
       : z.string().min(1),
     GITHUB_CLIENT_SECRET: process.env.CI
-      ? z.string().default("https://github.com/settings/developers")
+      ? z.string().default("Generate at `https://github.com/settings/developers`")
       : z.string().min(1),
     HONO_APP_URL: z.url().default("http://localhost:4000"),
     HONO_TRUSTED_ORIGINS: z
@@ -28,7 +28,7 @@ export const env = createEnv({
       .default("http://localhost:3000")
       .transform((s) => s.split(",")),
     POSTGRES_URL: process.env.CI
-      ? z.url().default("postgresql://postgres:postgres@localhost:5432/postgres")
+      ? z.string().default("Generate using `bunx pglaunch -k`")
       : z.url(),
   },
   clientPrefix: "NEXT_PUBLIC_",
