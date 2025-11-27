@@ -13,13 +13,13 @@ if (typeof window === "undefined") {
 export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "production"]).default("development"),
-    BETTER_AUTH_SECRET: !!process.env.CI
+    BETTER_AUTH_SECRET: process.env.CI
       ? z.string().default("openssl rand -base64 32")
       : z.string().min(1),
-    GITHUB_CLIENT_ID: !!process.env.CI
+    GITHUB_CLIENT_ID: process.env.CI
       ? z.string().default("https://github.com/settings/developers")
       : z.string().min(1),
-    GITHUB_CLIENT_SECRET: !!process.env.CI
+    GITHUB_CLIENT_SECRET: process.env.CI
       ? z.string().default("https://github.com/settings/developers")
       : z.string().min(1),
     HONO_PUBLIC_APP_URL: z.url().default("http://localhost:4000"),
@@ -27,7 +27,7 @@ export const env = createEnv({
       .string()
       .default("http://localhost:3000")
       .transform((s) => s.split(",")),
-    POSTGRES_URL: !!process.env.CI
+    POSTGRES_URL: process.env.CI
       ? z.url().default("postgresql://postgres:postgres@localhost:5432/postgres")
       : z.url(),
   },
