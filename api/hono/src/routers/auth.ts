@@ -17,25 +17,27 @@ export const authRouter = new Hono()
         headers: c.req.raw.headers,
       })
 
-      if (!session) {
-        return c.json(null)
-      }
+      if (!session) return c.json(null)
 
       const { select } = c.req.valid("query")
 
-      if (!select) {
-        return c.json(session)
-      }
+      if (!select) return c.json(session)
 
-      const selections = select.split(",")
+      const selections = select
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+
       const result: Partial<typeof session> = {}
 
-      if (selections.includes("user")) {
-        result.user = session.user
-      }
+      for (const key of selections) {
+        if (key === "user") {
+          result.user = session.user
+        }
 
-      if (selections.includes("session")) {
-        result.session = session.session
+        if (key === "session") {
+          result.session = session.session
+        }
       }
 
       return c.json(result)
