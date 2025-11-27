@@ -28,5 +28,5 @@ jobs:
       - name: Check Types
         run: bun run check-types
 
-      # - name: Build
-      #   run: bun run build
+      - name: Build
+        run: bun run build
