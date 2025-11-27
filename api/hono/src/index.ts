@@ -9,7 +9,7 @@ const app = new Hono().basePath("/api")
 app.use(logger())
 
 app.use(
-  "/auth/*",
+  "/*",
   cors({
     origin: process.env.HONO_PUBLIC_ORIGINS ? process.env.HONO_PUBLIC_ORIGINS.split(",") : [],
     allowHeaders: ["Content-Type", "Authorization"],
