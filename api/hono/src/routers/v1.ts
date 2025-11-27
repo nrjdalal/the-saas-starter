@@ -1,7 +1,8 @@
 import { Hono } from "hono"
 
-import { authMiddleware } from "@/middlewares/auth"
 import type { Variables } from "@/types"
+
+import { authMiddleware } from "@/middlewares/auth"
 
 const app = new Hono<{
   Variables: Variables

@@ -15,6 +15,35 @@
     "lint": "oxlint",
     "start": "bun dist/index.mjs"
   },
+  "lint-staged": {
+    "*": [
+      "prettier --write --ignore-unknown",
+      "oxlint"
+    ],
+    "package.json": "sort-package-json"
+  },
+  "prettier": {
+    "importOrder": [
+      "<BUILTIN_MODULES>",
+      "",
+      "^hono/(.*)$|^hono$",
+      "",
+      "<THIRD_PARTY_MODULES>",
+      "",
+      "^@/types/(.*)$",
+      "^@/db/(.*)$",
+      "^@/lib/(.*)$",
+      "^@/middlewares/(.*)$",
+      "^@/routers/(.*)$",
+      "",
+      "^[./]"
+    ],
+    "plugins": [
+      "@ianvs/prettier-plugin-sort-imports"
+    ],
+    "printWidth": 100,
+    "semi": false
+  },
   "dependencies": {
     "@hono/zod-validator": "catalog:",
     "better-auth": "catalog:",
@@ -25,6 +54,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@packages/tsconfig": "workspace:*",
     "@types/bun": "catalog:",
     "concurrently": "catalog:",

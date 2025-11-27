@@ -1,8 +1,10 @@
 import { Hono } from "hono"
-import { auth } from "@/lib/auth"
+
+import type { Variables } from "@/types"
 import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
-import type { Variables } from "@/types"
+
+import { auth } from "@/lib/auth"
 
 const app = new Hono<{
   Variables: Variables
