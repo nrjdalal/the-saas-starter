@@ -95,23 +95,20 @@ const data = await res.json()
 
    Create a `.env` file in the root directory with the following variables:
 
-   ```bash
+   ```env
    # -------------------- Server variables --------------------
-
-   # Generate using `openssl rand -base64 32`
-
-   BETTER_AUTH_SECRET=
-
-   # Generate at `https://github.com/settings/developers`
-
-   GITHUB_CLIENT_ID=
-   GITHUB_CLIENT_SECRET=
 
    HONO_APP_URL=http://localhost:4000
    HONO_TRUSTED_ORIGINS=http://localhost:3000
 
-   # Generate using `bunx pglaunch -k`
+   # Generate using `openssl rand -base64 32`
+   BETTER_AUTH_SECRET=
 
+   # Generate at `https://github.com/settings/developers`
+   GITHUB_CLIENT_ID=
+   GITHUB_CLIENT_SECRET=
+
+   # Generate using `bunx pglaunch -k`
    POSTGRES_URL=
 
    # -------------------- Client variables --------------------
