@@ -17,7 +17,7 @@ mv graph.svg .github/assets/graph-build.svg
 
 ## 🚀 Tech Stack
 
-- **Runtime and Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
+- **Runtime & Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
 - **Frontend**: [Next.js 15](https://nextjs.org)
 - **Backend**: [Hono](https://hono.dev)
 - **RPC**: [Hono Client](https://hono.dev/docs/guides/rpc) for end-to-end type safety with frontend client
