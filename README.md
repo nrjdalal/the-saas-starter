@@ -55,7 +55,7 @@ This project is a monorepo organized as follows:
 This starter utilizes [Hono RPC](https://hono.dev/docs/guides/rpc) to provide end-to-end type safety between the backend and frontend.
 
 - **Backend**: Routes defined in `api/hono/src/routers` are exported as `AppType` at `api/hono/src/index.ts`.
-- **Frontend**: The client at `web/next/src/lib/api/client.ts` infers `AppType` request/response types.
+- **Frontend**: The client at `web/next/src/lib/api/client.ts` infers `AppType` request/response types using `hono/client`.
 
 ### Usage Example
 
