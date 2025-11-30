@@ -2,13 +2,15 @@
   "name": "@packages/db",
   "version": "0.0.1",
   "private": true,
-  "exports": "./src/index.ts",
-  "types": "./src/index.ts",
+  "type": "module",
+  "exports": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
-    "check-types": "tsc --noEmit",
+    "build": "tsdown",
+    "check-types": "turbo build --filter=@packages/env && tsc --noEmit",
     "lint": "oxlint"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "@types/bun": "catalog:",
     "@types/node": "catalog:",
     "drizzle-kit": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:"
   }
 }

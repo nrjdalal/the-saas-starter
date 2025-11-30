@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "check-types": "tsc --noEmit",
+    "check-types": "turbo build --filter=@packages/auth && tsc --noEmit",
     "dev": "concurrently \"tsdown --watch\" \"bun --hot src/index.ts\"",
     "format": "prettier --write --ignore-unknown *",
     "lint": "oxlint",

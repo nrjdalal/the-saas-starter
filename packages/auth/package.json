@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "exports": "./src/index.ts",
-  "types": "./src/index.ts",
+  "exports": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
-    "check-types": "tsc --noEmit",
+    "build": "tsdown",
+    "check-types": "turbo build --filter=@packages/db && tsc --noEmit",
     "lint": "oxlint"
   },
   "dependencies": {
@@ -21,6 +22,7 @@
     "@packages/tsconfig": "workspace:*",
     "@types/bun": "catalog:",
     "@types/node": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:"
   }
 }
