@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/hono/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+
+  web:
+    build:
+      context: .
+      dockerfile: web/next/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"

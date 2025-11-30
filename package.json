@@ -16,7 +16,7 @@
     "db:push": "bun --cwd packages/db drizzle-kit push",
     "db:studio": "bun --cwd packages/db drizzle-kit studio",
     "dev": "turbo dev",
-    "format": "turbo format --summarize",
+    "format": "prettier --write --ignore-unknown *",
     "postinstall": "bun .github/scripts/deps-manager.ts",
     "lint": "turbo lint --summarize",
     "prepare": "bunx simple-git-hooks",
@@ -48,12 +48,14 @@
   "devDependencies": {
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@types/bun": "catalog:",
     "@types/node": "catalog:",
     "globby": "catalog:",
     "lint-staged": "catalog:",
     "oxlint": "catalog:",
     "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:",
     "simple-git-hooks": "catalog:",
     "sort-package-json": "catalog:",
     "turbo": "catalog:"

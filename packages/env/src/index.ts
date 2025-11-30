@@ -1,10 +1,11 @@
 import { createEnv } from "@t3-oss/env-core"
+import { config } from "dotenv"
+import path from "node:path"
 import { z } from "zod"
 
 if (typeof window === "undefined") {
   try {
-    const path = require("path")
-    require("dotenv").config({ path: path.resolve(process.cwd(), "../../.env") })
+    config({ path: path.resolve(process.cwd(), "../../.env") })
   } catch (e) {
     console.error(e)
   }
@@ -39,3 +40,21 @@ export const env = createEnv({
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
 })
+
+export const getSafeEnv = () => {
+  const redactKeys = ["db_url", "key", "password", "postgres_url", "secret", "token"]
+
+  const result = Object.fromEntries(
+    Object.entries(env).map(([key, value]) => {
+      const isRedacted = redactKeys.some((redactKey) =>
+        key.toLowerCase().includes(redactKey.toLowerCase()),
+      )
+      if (isRedacted) {
+        return [key, "******** REDACTED ********"]
+      }
+      return [key, value]
+    }),
+  )
+  console.log("@packages/env:getSafeEnv:", result)
+  return result
+}
