@@ -18,7 +18,7 @@ mv graph.svg .github/assets/graph-build.svg
 ## 🚀 Tech Stack
 
 - **Runtime & Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
-- **Frontend**: [Next.js 15](https://nextjs.org)
+- **Frontend**: [Next.js 16](https://nextjs.org)
 - **Backend**: [Hono](https://hono.dev)
 - **RPC**: [Hono Client](https://hono.dev/docs/guides/rpc) for end-to-end type safety with frontend client
 - **Database**: [PostgreSQL](https://www.postgresql.org) with [Drizzle ORM](https://orm.drizzle.team)
@@ -79,13 +79,13 @@ This starter utilizes [Hono RPC](https://hono.dev/docs/guides/rpc) to provide en
 import { apiClient } from "@/lib/api/client"
 
 // Fully typed request and response
-const res = await apiClient.v1.hello.$get()
+const res = await apiClient.health.$get()
 const data = await res.json()
 ```
 
 ---
 
-## 🛠️ Getting Started
+## ⚙️ Getting Started
 
 ### Prerequisites
 
@@ -141,7 +141,7 @@ const data = await res.json()
    bun run db:push
    ```
 
-### 🔐 Authentication Setup
+### Authentication Setup
 
 This starter uses [Better Auth](https://better-auth.com) with GitHub as the provider.
 
@@ -152,17 +152,20 @@ This starter uses [Better Auth](https://better-auth.com) with GitHub as the prov
 
 ### Running the Application
 
-Start the development servers:
+```bash
+bun dev
+```
+
+### Running the Application with Docker Compose
+
+```bash
+docker compose up
+```
+
+### Accessing the Application
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend: [http://localhost:4000](http://localhost:4000)
-
-  ```bash
-  bun dev
-  ```
-
-> [!IMPORTANT]
-> If you are using `docker-compose up`, replace `localhost` with `host.internal.docker` if you get any errors.
 
 ---
 
