@@ -14,5 +14,7 @@ services:
       dockerfile: web/next/Dockerfile
     env_file:
       - .env
+    environment:
+      - INTERNAL_API_URL=http://api:4000
     ports:
       - "3000:3000"

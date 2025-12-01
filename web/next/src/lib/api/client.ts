@@ -6,7 +6,12 @@ type Client = ReturnType<typeof hc<AppType>>
 
 const hcWithType = (...args: Parameters<typeof hc>): Client => hc<AppType>(...args)
 
-const honoClient = hcWithType(env.NEXT_PUBLIC_API_URL, {
+const url =
+  typeof window === "undefined" && env.INTERNAL_API_URL
+    ? env.INTERNAL_API_URL
+    : env.NEXT_PUBLIC_API_URL
+
+const honoClient = hcWithType(url, {
   init: {
     credentials: "include",
   },

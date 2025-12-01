@@ -33,6 +33,7 @@ export const env = createEnv({
           .string()
           .min(1)
           .transform((s) => s.split(",")),
+    INTERNAL_API_URL: z.string().optional(),
     POSTGRES_URL: process.env.CI
       ? z.string().default("Generate using `bunx pglaunch -k`")
       : z.url(),
@@ -49,6 +50,7 @@ export const env = createEnv({
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     HONO_APP_URL: process.env.HONO_APP_URL,
     HONO_TRUSTED_ORIGINS: process.env.HONO_TRUSTED_ORIGINS,
+    INTERNAL_API_URL: process.env.INTERNAL_API_URL,
     POSTGRES_URL: process.env.POSTGRES_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
