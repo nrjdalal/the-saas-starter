@@ -17,18 +17,18 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string().min(1),
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
-    HONO_APP_URL: z.url().default("http://localhost:4000"),
+    HONO_APP_URL: z.url(),
     HONO_TRUSTED_ORIGINS: z
       .string()
-      .default("http://localhost:3000")
-      .transform((s) => s.split(",")),
+      .transform((s) => s.split(",").map((v) => v.trim()))
+      .pipe(z.array(z.url())),
     INTERNAL_API_URL: z.url().optional(),
     POSTGRES_URL: z.url(),
   },
   clientPrefix: "NEXT_PUBLIC_",
   client: {
-    NEXT_PUBLIC_APP_URL: z.url().default("http://localhost:3000"),
-    NEXT_PUBLIC_API_URL: z.url().default("http://localhost:4000"),
+    NEXT_PUBLIC_APP_URL: z.url(),
+    NEXT_PUBLIC_API_URL: z.url(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
