@@ -5,7 +5,7 @@ A modern, type-safe, and high-performance SaaS starter template built with a mon
 <!--
 ```bash
 npx turbo run build --graph=graph.svg
-sed -i '' 's/\[root\] //g; s/#build//g; s/___ROOT___/zerostarter/g' graph.svg
+sed -i '' 's/\[root\] //g; s/#build//g; s/___ROOT___/ZeroStarter/g' graph.svg
 mkdir -p .github/assets
 mv graph.svg .github/assets/graph-build.svg
 ```
