@@ -1,3 +1,9 @@
-export default function Page() {
+import { createFileRoute } from "@tanstack/react-router"
+
+export const Route = createFileRoute("/_layout/x/")({
+  component: Page,
+})
+
+function Page() {
   return null
 }

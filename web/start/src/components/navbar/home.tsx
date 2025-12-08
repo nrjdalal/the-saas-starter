@@ -1,9 +1,6 @@
-"use client"
-
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
 
+import { Link, useLocation } from "@tanstack/react-router"
 import { Loader2 } from "lucide-react"
 
 import { useSession } from "@/lib/auth/client"
@@ -12,8 +9,10 @@ import { Button } from "@/components/ui/button"
 import Access from "@/components/access"
 import ModeToggle from "@/components/mode-toggle"
 
-export default function Component() {
-  const pathname = usePathname()
+export function NavbarHome() {
+  const pathname = useLocation({
+    select: (location) => location.pathname,
+  })
   const { data: session } = useSession()
 
   const [scrolled, setScrolled] = useState(false)
@@ -41,12 +40,12 @@ export default function Component() {
           !scrolled && "bg-sidebar rounded-md border",
         )}
       >
-        <Link href="/" className="font-bold">
+        <Link to="/" className="font-bold">
           ZeroStarter
         </Link>
         <div className="flex items-center gap-2.5">
           {session?.user ? (
-            <Link href="/x">
+            <Link to="/x">
               <Button
                 className="w-24 cursor-pointer"
                 size="sm"

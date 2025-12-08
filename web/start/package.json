@@ -1,14 +1,14 @@
 {
-  "name": "@web/next",
+  "name": "@web/start",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "vite build",
     "check-types": "turbo build --filter=@api/hono && tsc --noEmit",
-    "dev": "next dev",
-    "format": "prettier --write --ignore-unknown *",
+    "dev": "vite dev --port 3000",
     "lint": "oxlint",
-    "start": "next start"
+    "start": "vite preview"
   },
   "lint-staged": {
     "*": [
@@ -24,7 +24,6 @@
       "<BUILTIN_MODULES>",
       "",
       "^react/(.*)$|^react$",
-      "^next/(.*)$|^next$",
       "",
       "<THIRD_PARTY_MODULES>",
       "",
@@ -61,7 +60,6 @@
     "hono": "catalog:",
     "input-otp": "catalog:",
     "lucide-react": "catalog:",
-    "next": "catalog:",
     "next-themes": "catalog:",
     "radix-ui": "catalog:",
     "react": "catalog:",
@@ -80,16 +78,29 @@
     "@fontsource-variable/jetbrains-mono": "catalog:",
     "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@packages/tsconfig": "workspace:*",
-    "@tailwindcss/postcss": "catalog:",
-    "@tanstack/react-query-devtools": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@tanstack/devtools-vite": "catalog:",
+    "@tanstack/eslint-config": "catalog:",
+    "@tanstack/react-devtools": "catalog:",
+    "@tanstack/react-query-devtools": "^5.91.1",
+    "@tanstack/react-router": "catalog:",
+    "@tanstack/react-router-devtools": "catalog:",
+    "@tanstack/react-router-ssr-query": "catalog:",
+    "@tanstack/react-start": "catalog:",
+    "@tanstack/virtual-file-routes": "catalog:",
     "@types/bun": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
+    "nitro": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "virtual-next-routes": "catalog:",
+    "vite": "catalog:",
+    "vite-tsconfig-paths": "catalog:"
   }
 }

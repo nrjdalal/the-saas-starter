@@ -41,8 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 # custom directories
+.output/
 .turbo/
 dist/
 
 # custom files
 !.env.example
+routeTree.gen.ts

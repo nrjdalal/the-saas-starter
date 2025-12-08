@@ -1,4 +1,5 @@
-import { redirect } from "next/navigation"
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { createServerFn } from "@tanstack/react-start"
 
 import { auth } from "@/lib/auth"
 import {
@@ -11,10 +12,27 @@ import {
 } from "@/components/ui/sidebar"
 import SidebarUser from "@/components/sidebar/user"
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
-  const session = await auth.api.getSession()
+const getSession = createServerFn({ method: "GET" }).handler(async () => {
+  return await auth.api.getSession()
+})
 
-  if (!session?.user) redirect("/")
+export const Route = createFileRoute("/_layout")({
+  loader: async () => {
+    const session = await getSession()
+
+    if (!session?.user) {
+      throw redirect({
+        to: "/",
+      })
+    }
+
+    return { session }
+  },
+  component: Layout,
+})
+
+function Layout() {
+  const { session } = Route.useLoaderData()
 
   return (
     <SidebarProvider>
@@ -27,7 +45,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </Sidebar>
       <main>
         <SidebarTrigger className="bg-sidebar absolute m-2 cursor-pointer border" />
-        {children}
+        <Outlet />
       </main>
     </SidebarProvider>
   )

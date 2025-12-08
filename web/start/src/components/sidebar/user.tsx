@@ -1,7 +1,4 @@
-"use client"
-
-import { redirect } from "next/navigation"
-
+import { useNavigate } from "@tanstack/react-router"
 import { type User } from "better-auth/types"
 import { ChevronsUpDown, LogOut } from "lucide-react"
 
@@ -25,6 +22,7 @@ import {
 
 export default function Component({ user }: { user: User }) {
   const { isMobile } = useSidebar()
+  const navigate = useNavigate()
 
   return (
     <SidebarMenu>
@@ -72,7 +70,7 @@ export default function Component({ user }: { user: User }) {
               className="cursor-pointer"
               onClick={async () => {
                 await signOut()
-                redirect("/")
+                navigate({ to: "/" })
               }}
             >
               <LogOut />
