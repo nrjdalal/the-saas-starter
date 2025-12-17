@@ -1,1 +1,1 @@
-export { getSafeEnv } from "./utils"
+export { getSafeEnv } from "./lib/utils"
