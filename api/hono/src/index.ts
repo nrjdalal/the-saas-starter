@@ -4,7 +4,7 @@ import { logger } from "hono/logger"
 
 import { authRouter, v1Router } from "@/routers"
 import type { Session } from "@packages/auth"
-import { env } from "@packages/env"
+import { env } from "@packages/env/api-hono"
 
 const app = new Hono<{ Variables: Session }>().basePath("/api")
 

@@ -1,4 +1,4 @@
-import { env } from "@packages/env"
+import { env } from "@packages/env/db"
 import { defineConfig } from "drizzle-kit"
 
 export default defineConfig({

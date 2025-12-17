@@ -1,6 +1,9 @@
 import type { NextConfig } from "next"
 
-import { env } from "@packages/env"
+import { getSafeEnv } from "@packages/env"
+import { env } from "@packages/env/web-next"
+
+getSafeEnv(env)
 
 const nextConfig: NextConfig = {
   reactCompiler: true,

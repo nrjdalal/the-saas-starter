@@ -1,4 +1,4 @@
-import { env } from "@packages/env"
+import { env } from "@packages/env/web-next"
 import { magicLinkClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
 

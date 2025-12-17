@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import { env } from "@packages/env"
+import { env } from "@packages/env/web-next"
 import { RiGithubFill, RiGoogleFill } from "@remixicon/react"
 import { useForm } from "@tanstack/react-form"
 import { GalleryVerticalEnd, Loader2 } from "lucide-react"

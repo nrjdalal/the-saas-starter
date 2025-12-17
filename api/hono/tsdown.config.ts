@@ -1,4 +1,5 @@
 import { getSafeEnv } from "@packages/env"
+import { env } from "@packages/env/api-hono"
 import { defineConfig } from "tsdown"
 
 export default [
@@ -7,7 +8,7 @@ export default [
     minify: true,
     hooks: {
       "build:prepare": () => {
-        getSafeEnv()
+        getSafeEnv(env)
       },
     },
   }),

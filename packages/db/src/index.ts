@@ -1,4 +1,4 @@
-import { env } from "@packages/env"
+import { env } from "@packages/env/db"
 import { SQL } from "bun"
 import { drizzle } from "drizzle-orm/bun-sql"
 import type { BunSQLDatabase } from "drizzle-orm/bun-sql"

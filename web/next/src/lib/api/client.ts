@@ -1,5 +1,5 @@
 import type { AppType } from "@api/hono"
-import { env } from "@packages/env"
+import { env } from "@packages/env/web-next"
 import { hc } from "hono/client"
 
 type Client = ReturnType<typeof hc<AppType>>
