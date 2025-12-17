@@ -14,4 +14,5 @@ export const env = createEnv({
       : process.env.POSTGRES_URL,
   },
   emptyStringAsUndefined: true,
+  skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 })

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "check-types": "turbo build --filter=@api/hono && tsc --noEmit",
+    "check-types": "SKIP_ENV_VALIDATION=true turbo build --filter=@api/hono && tsc --noEmit",
     "dev": "next dev",
     "format": "prettier --write --ignore-unknown *",
     "lint": "oxlint",

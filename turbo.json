@@ -24,6 +24,8 @@
     }
   },
   "globalEnv": [
+    // CI variables
+    "SKIP_ENV_VALIDATION",
     // Server variables
     "NODE_ENV",
     "BETTER_AUTH_SECRET",
