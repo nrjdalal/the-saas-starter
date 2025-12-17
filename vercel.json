@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "projects": {
+    "web/next": {
+      "framework": "nextjs",
+      "buildCommand": "bun run build",
+      "installCommand": "bun install --ignore-scripts"
+    },
+    "api/hono": {
+      "framework": "hono",
+      "buildCommand": "bun run build",
+      "installCommand": "bun install --ignore-scripts",
+      "outputDirectory": "dist"
+    }
+  }
+}
