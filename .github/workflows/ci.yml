@@ -29,4 +29,9 @@ jobs:
         run: bun run check-types
 
       - name: Build
-        run: SKIP_ENV_VALIDATION=true bun run build
+        run: bun run build
+        env:
+          SKIP_ENV_VALIDATION: true
+          NODE_ENV: production
+          NEXT_PUBLIC_APP_URL: https://polyfill.url
+          NEXT_PUBLIC_API_URL: https://polyfill.url
