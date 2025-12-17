@@ -81,7 +81,7 @@ export default function Component() {
       )}
 
       <CodeXml
-        className="size-[1.875rem] cursor-pointer p-1.5"
+        className="size-7.5 cursor-pointer p-1.5"
         onClick={() => setExpandDevtools(!expandDevtools)}
       />
     </div>
