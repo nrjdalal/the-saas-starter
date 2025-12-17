@@ -62,7 +62,6 @@
       "dependencies": {
         "@packages/env": "workspace:*",
         "drizzle-orm": "catalog:",
-        "postgres": "catalog:",
       },
       "devDependencies": {
         "@packages/tsconfig": "workspace:*",
