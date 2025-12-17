@@ -19,11 +19,20 @@ RUN bun run build
 
 FROM base AS runner
 WORKDIR /app
-COPY --from=builder /app/packages/ ./packages/
 COPY --from=builder /app/node_modules/ ./node_modules/
+# @web/next
 COPY --from=builder /app/web/next/.next/ ./.next/
 COPY --from=builder /app/web/next/package.json .
 COPY --from=builder /app/web/next/public/ ./public/
+# @api/hono
+COPY --from=builder /app/api/hono/dist/ ./api/hono/dist/
+COPY --from=builder /app/api/hono/package.json ./api/hono/
+# @packages/auth
+COPY --from=builder /app/packages/auth/dist/ ./packages/auth/dist/
+COPY --from=builder /app/packages/auth/package.json ./packages/auth/
+# @packages/env
+COPY --from=builder /app/packages/env/dist/ ./packages/env/dist/
+COPY --from=builder /app/packages/env/package.json ./packages/env/
 
 USER bun
 CMD ["bun", "run", "start"]
