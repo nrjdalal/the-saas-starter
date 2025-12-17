@@ -13,10 +13,16 @@
     "check-types": "turbo build --filter=@packages/env && tsc --noEmit",
     "lint": "oxlint"
   },
+  "prettier": {
+    "plugins": [
+      "@ianvs/prettier-plugin-sort-imports"
+    ],
+    "printWidth": 100,
+    "semi": false
+  },
   "dependencies": {
     "@packages/env": "workspace:*",
-    "drizzle-orm": "catalog:",
-    "postgres": "catalog:"
+    "drizzle-orm": "catalog:"
   },
   "devDependencies": {
     "@packages/tsconfig": "workspace:*",

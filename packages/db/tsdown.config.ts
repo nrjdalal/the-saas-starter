@@ -4,5 +4,6 @@ export default [
   defineConfig({
     entry: ["src/index.ts"],
     minify: true,
+    external: ["bun"],
   }),
 ]
