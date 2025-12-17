@@ -135,10 +135,16 @@ const data = await res.json()
 ### Database Setup
 
 1. Ensure your PostgreSQL server is running.
-2. Push the schema to the database:
+2. Run the generation:
 
    ```bash
-   bun run db:push
+   bun run db:generate
+   ```
+
+3. Run the migration:
+
+   ```bash
+   bun run db:migrate
    ```
 
 ### Authentication Setup
@@ -180,7 +186,6 @@ docker compose up
 - `bun run start`: Start the production servers.
 - `bun run db:generate`: Generate Drizzle migrations.
 - `bun run db:migrate`: Run Drizzle migrations.
-- `bun run db:push`: Push schema changes directly to the database.
 - `bun run db:studio`: Open Drizzle Studio to view/edit data.
 
 ## 📖 Deployment
