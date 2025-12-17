@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "hono",
+  "framework": "nextjs",
   "installCommand": "bun install --ignore-scripts"
 }
