@@ -61,7 +61,7 @@
     "hono": "catalog:",
     "input-otp": "catalog:",
     "lucide-react": "catalog:",
-    "next": "catalog:",
+    "next": "15.5.8",
     "next-themes": "catalog:",
     "radix-ui": "catalog:",
     "react": "catalog:",
