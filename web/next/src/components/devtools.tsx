@@ -6,8 +6,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { CodeXml, ExternalLink } from "lucide-react"
 
 const config = {
-  GITHUB: "nrjdalal/the-next-starter",
-  VERCEL: "nrjdalals-projects/the-next-starter",
+  GITHUB: "nrjdalal/zerostarter",
+  VERCEL: "nrjdalals-projects/zerostarter",
 }
 
 const Links = [
@@ -81,7 +81,7 @@ export default function Component() {
       )}
 
       <CodeXml
-        className="size-[1.875rem] cursor-pointer p-1.5"
+        className="size-7.5 cursor-pointer p-1.5"
         onClick={() => setExpandDevtools(!expandDevtools)}
       />
     </div>

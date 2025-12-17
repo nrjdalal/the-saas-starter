@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["canary"]
   pull_request:
     types: [opened, synchronize]
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -30,3 +30,8 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          SKIP_ENV_VALIDATION: true
+          NODE_ENV: production
+          NEXT_PUBLIC_APP_URL: https://polyfill.url
+          NEXT_PUBLIC_API_URL: https://polyfill.url
