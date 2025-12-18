@@ -6,22 +6,23 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { CodeXml, ExternalLink } from "lucide-react"
 
 const config = {
-  GITHUB: "nrjdalal/zerostarter",
-  VERCEL: "nrjdalals-projects/zerostarter",
+  WebNext: "nrjdalals-projects/zerostarter.dev",
+  ApiHono: "nrjdalals-projects/api.zerostarter.dev",
+  Github: "nrjdalal/zerostarter",
 }
 
 const Links = [
   {
-    title: "AWS",
-    url: "https://console.aws.amazon.com/s3",
+    title: "WebNext",
+    url: `https://vercel.com/${config.WebNext}/deployments`,
+  },
+  {
+    title: "ApiHono",
+    url: `https://vercel.com/${config.ApiHono}/deployments`,
   },
   {
     title: "Github",
-    url: `https://github.com/${config.GITHUB}/tree/main/src`,
-  },
-  {
-    title: "Vercel",
-    url: `https://vercel.com/${config.VERCEL}/deployments`,
+    url: `https://github.com/${config.Github}/tree/main/src`,
   },
 ]
 
