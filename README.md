@@ -15,7 +15,7 @@ mv graph.svg .github/assets/graph-build.svg
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Runtime & Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
 - **Frontend**: [Next.js 16](https://nextjs.org)
