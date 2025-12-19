@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-export default function Component({ user }: { user: User }) {
+export function SidebarUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
 
   return (
