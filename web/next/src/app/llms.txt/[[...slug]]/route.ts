@@ -13,7 +13,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug?: 
     const allPages = source.getPages()
     const index = allPages
       .map(
-        (p) => `- [${p.data.title}](${env.NEXT_PUBLIC_APP_URL}${p.url}.txt): ${p.data.description}`,
+        (p) => `- [${p.data.title}](${env.NEXT_PUBLIC_APP_URL}${p.url}.md): ${p.data.description}`,
       )
       .join("\n")
 
