@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: config.app.description,
   openGraph: {
     type: "website",
-    url: config.app.url,
     siteName: config.app.name,
+    url: config.app.url,
     images: [
       {
         url: `${config.app.url}/api/og/home`,

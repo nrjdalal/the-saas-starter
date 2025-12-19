@@ -48,6 +48,7 @@ export async function generateMetadata(props: PageProps<"/docs/[[...slug]]">): P
     description: page.data.description,
     openGraph: {
       type: "website",
+      siteName: config.app.name,
       url: pageUrl,
       images: [
         {
@@ -57,6 +58,9 @@ export async function generateMetadata(props: PageProps<"/docs/[[...slug]]">): P
           alt: page.data.title,
         },
       ],
+    },
+    other: {
+      "og:logo": `${config.app.url}/favicon.ico`,
     },
     twitter: {
       card: "summary_large_image",

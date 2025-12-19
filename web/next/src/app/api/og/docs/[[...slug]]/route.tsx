@@ -74,10 +74,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug?: 
     },
   )
 
-  imageResponse.headers.set(
-    "Cache-Control",
-    "public, s-maxage=31536000, stale-while-revalidate=86400",
-  )
+  imageResponse.headers.set("Cache-Control", "public, immutable, no-transform, max-age=31536000")
 
   return imageResponse
 }
