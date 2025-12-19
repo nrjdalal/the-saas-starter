@@ -28,13 +28,13 @@ mv graph.svg .github/assets/graph-build.svg
 - **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
 - **Validation**: [Zod](https://zod.dev)
 - **Linting & Formatting**: [Oxlint](https://oxc.rs/docs/guide/usage/linter) + [Prettier](https://prettier.io)
+- **Documentation**: [Fumadocs](https://fumadocs.dev) with auto-generated [llms.txt](https://zerostarter.dev/llms.txt)
 
 ### Future Stack and Features
 
 - **Analytics**:
   - [ ] [Posthog](https://posthog.com)
-- **Documentation**:
-  - [ ] [Fumadocs](https://fumadocs.dev)
+- **OpenAPI**:
   - [ ] [Scalar](https://scalar.com)
 - **Internationalization**:
   - [ ] [i18next](https://www.i18next.com)
@@ -177,13 +177,24 @@ docker compose up
 
 ## 📜 Scripts
 
+### Development
+
 - `bun run dev`: Start the development servers.
+
+### Maintenance
+
 - `bun run clean`: Clean the cache and build artifacts.
-- `bun run check-types`: Check the types of the codebase.
-- `bun run build`: Build the applications.
 - `bun run lint`: Lint the codebase using Oxlint.
 - `bun run format`: Format the codebase using Prettier.
+- `bun run check-types`: Check the types of the codebase.
+
+### Production
+
+- `bun run build`: Build the applications.
 - `bun run start`: Start the production servers.
+
+### Database
+
 - `bun run db:generate`: Generate Drizzle migrations.
 - `bun run db:migrate`: Run Drizzle migrations.
 - `bun run db:studio`: Open Drizzle Studio to view/edit data.
@@ -191,9 +202,9 @@ docker compose up
 ## 📖 Deployment
 
 - **Frontend**:
-  - [Vercel](.github/docs/deployment.md#vercel)
+  - [Vercel](.github/docs/deployment/vercel.md#vercel)
 - **Backend**:
-  - [Vercel](.github/docs/deployment.md#vercel-1)
+  - [Vercel](.github/docs/deployment/vercel.md#vercel-1)
 
 ## 🤝 Contributing
 

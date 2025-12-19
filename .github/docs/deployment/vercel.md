@@ -1,4 +1,6 @@
-# ZeroStarter - Deployment
+# Deploy at Vercel
+
+Deploy your frontend and backend at Vercel.
 
 ## Frontend
 
