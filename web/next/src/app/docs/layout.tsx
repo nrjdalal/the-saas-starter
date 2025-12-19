@@ -11,13 +11,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { SidebarDocs } from "@/components/sidebar/docs"
 
 export default function Layout({ children }: LayoutProps<"/docs">) {
   return (
     <SidebarProvider>
-      <Sidebar className="md:pt-14" collapsible="offcanvas">
+      <Sidebar className="md:pt-12" collapsible="offcanvas">
         <SidebarHeader />
-        <SidebarContent>{/* Content Goes Here */}</SidebarContent>
+        <SidebarContent>
+          <SidebarDocs />
+        </SidebarContent>
         <SidebarFooter />
       </Sidebar>
       <main>

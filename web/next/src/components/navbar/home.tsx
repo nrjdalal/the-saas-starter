@@ -17,7 +17,7 @@ export default function Component() {
 
   const [toDashboard, setToDashboard] = useState(false)
 
-  if (pathname !== "/" && pathname !== "/docs") return null
+  if (pathname !== "/" && !pathname?.startsWith("/docs")) return null
 
   return (
     <div className="bg-sidebar fixed top-0 left-0 z-50 w-full border-b">
