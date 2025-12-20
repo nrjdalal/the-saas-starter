@@ -47,7 +47,7 @@ ${blogIndex}
 
 # Optional
 
-- [Documentation](${config.app.url}/docs.md): Documentation for ${config.app.name}
+- [Documentation](${config.app.url}/llms.txt): Documentation for ${config.app.name}
 `,
       {
         headers: {
