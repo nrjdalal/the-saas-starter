@@ -17,7 +17,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug?: 
     return new Response(
       `# Documentation
 
-${docsIndex}`,
+${docsIndex}
+
+# Optional
+
+- [Blog](${config.app.url}/blog.md): Latest articles and updates
+`,
       {
         headers: {
           "Content-Type": "text/markdown",
@@ -28,6 +33,30 @@ ${docsIndex}`,
 
   const isBlog = slug[0] === "blog"
   const isDocs = slug[0] === "docs"
+
+  if (isBlog && slug.length === 1) {
+    const blogPages = blogSource.getPages().filter((p) => p.url !== "/blog")
+    const blogIndex = blogPages
+      .map((p) => `- [${p.data.title}](${config.app.url}${p.url}.md): ${p.data.description}`)
+      .join("\n")
+
+    return new Response(
+      `# Blog
+
+${blogIndex}
+
+# Optional
+
+- [Documentation](${config.app.url}/docs.md): Documentation for ${config.app.name}
+`,
+      {
+        headers: {
+          "Content-Type": "text/markdown",
+        },
+      },
+    )
+  }
+
   const source = isBlog ? blogSource : docsSource
   const pageSlug = isBlog || isDocs ? (slug.length === 1 ? undefined : slug.slice(1)) : slug
 
