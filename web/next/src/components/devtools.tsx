@@ -22,7 +22,7 @@ const Links = [
   },
   {
     title: "Github",
-    url: `https://github.com/${config.Github}/tree/main/src`,
+    url: `https://github.com/${config.Github}`,
   },
 ]
 
