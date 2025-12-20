@@ -2,6 +2,16 @@
   "name": "zerostarter",
   "version": "0.0.1",
   "private": true,
+  "homepage": "https://github.com/nrjdalal/zerostarter#readme",
+  "bugs": "https://github.com/nrjdalal/zerostarter/issues",
+  "repository": "nrjdalal/zerostarter",
+  "funding": "https://github.com/sponsors/nrjdalal",
+  "license": "MIT",
+  "author": {
+    "name": "Neeraj Dalal",
+    "email": "admin@nrjdalal.com",
+    "url": "https://nrjdalal.com"
+  },
   "workspaces": [
     "api/*",
     "packages/*",
