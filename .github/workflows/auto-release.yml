@@ -12,10 +12,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  auto-release:
-    name: Create GitHub Release
+  update-changelog:
+    name: Update changelog branch
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref != 'changelog'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -32,71 +32,105 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Generate changelog and bump version
-        id: generate-changelog
+      - name: Update changelog branch from main
+        id: update-changelog
         run: |
           git checkout main
-          BRANCH_NAME="chore/update-changelog-$(date +%s)"
-          git checkout -b $BRANCH_NAME
+          git fetch origin changelog || true
+          git checkout changelog 2>/dev/null || git checkout -b changelog main
+
+          # Merge latest main into changelog to keep it in sync
+          git merge main --no-edit || true
+
           bunx changelogen --bump --no-commit || true
           if [ -n "$(git status --porcelain)" ]; then
             git add CHANGELOG.md package.json
             git commit -m "chore: update changelog and bump version"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $BRANCH_NAME
-            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git changelog
             echo "has_changes=true" >> $GITHUB_OUTPUT
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create PR for changelog and version bump
-        if: steps.generate-changelog.outputs.has_changes == 'true'
-        id: create-pr
+      - name: Create PR from changelog to canary
+        if: steps.update-changelog.outputs.has_changes == 'true'
         run: |
-          PR_RESPONSE=$(curl -sL -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls" \
-            -d "{\"title\": \"chore: update changelog and bump version\", \"head\": \"${{ steps.generate-changelog.outputs.branch_name }}\", \"base\": \"main\", \"body\": \"Automatically generated PR to update changelog and bump version after merge.\"}")
+          # Check if PR already exists
+          PR_RESPONSE=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:changelog&base=canary&state=open")
 
-          PR_NUMBER=$(echo "$PR_RESPONSE" | bunx fx 'x => x.number')
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "Created PR #$PR_NUMBER"
+          PR_NUMBER=$(echo "$PR_RESPONSE" | bunx fx 'x => x[0]?.number ?? null')
 
-      - name: Merge PR
-        if: steps.generate-changelog.outputs.has_changes == 'true'
-        run: |
-          sleep 2
-          curl -sL -X PUT \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.create-pr.outputs.pr_number }}/merge" \
-            -d "{\"merge_method\": \"squash\"}" || echo "PR merge may require review"
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" == "null" ]; then
+            curl -sL -X POST \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls" \
+              -d "{\"title\": \"chore: update changelog and bump version\", \"head\": \"changelog\", \"base\": \"canary\", \"body\": \"Automatically generated PR to update changelog and version from main.\"}"
+            echo "Created PR from changelog to canary"
+          else
+            echo "PR from changelog to canary already exists: #$PR_NUMBER"
+          fi
 
-      - name: Get version from package.json
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'canary'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Get version from canary
         id: get-version
         run: |
-          git fetch origin main
-          git checkout main
+          git checkout canary
+          git fetch origin canary
           VERSION=$(bunx fx 'x => x.version' package.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Creating release for version: $VERSION"
-
-      - name: Update canary branch with changelog and version
-        run: |
-          git fetch origin canary || true
-          git checkout canary 2>/dev/null || git checkout -b canary origin/canary 2>/dev/null || git checkout -b canary
-          git checkout main -- CHANGELOG.md package.json
-          if [ -n "$(git status --porcelain CHANGELOG.md package.json)" ]; then
-            git add CHANGELOG.md package.json
-            git commit -m "chore: sync changelog and version from main"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git canary
-          else
-            echo "No changes to sync to canary"
-          fi
+          echo "Version: $VERSION"
 
       - name: Create GitHub Release
         run: |
-          bunx changelogen gh release ${{ steps.get-version.outputs.version }}
+          git checkout canary
+          VERSION="${{ steps.get-version.outputs.version }}"
+
+          # Extract changelog content for this version
+          CHANGELOG_CONTENT=$(awk -v version="$VERSION" '
+            /^## / { 
+              if (found && /^## /) exit
+              if ($0 ~ version || $0 ~ "v" version || $0 ~ "\\[" version "\\]") {
+                found=1
+                next
+              }
+            }
+            found { print }
+          ' CHANGELOG.md)
+
+          # If no content found, use a default message
+          if [ -z "$CHANGELOG_CONTENT" ]; then
+            CHANGELOG_CONTENT="Release notes for version ${VERSION}"
+          fi
+
+          # Create GitHub release payload using fx and save
+          echo "$CHANGELOG_CONTENT" | bunx fx -s "content => ({
+            tag_name: 'v${VERSION}',
+            name: 'v${VERSION}',
+            body: content,
+            draft: false,
+            prerelease: false
+          })" save /tmp/release-payload.json
+
+          curl -sL -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/releases" \
+            -d @/tmp/release-payload.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
