@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  create-pr:
+  auto-canary-to-main:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check if PR already exists
-        id: check-pr
+        id: check-if-pr-exists
         run: |
           PR_RESPONSE=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:canary&base=main&state=open")
@@ -37,15 +37,15 @@ jobs:
           fi
 
       - name: Create Pull Request
-        if: steps.check-pr.outputs.pr_exists == 'false'
+        if: steps.check-if-pr-exists.outputs.pr_exists == 'false'
         run: |
           curl -sL -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/pulls" \
-            -d "{\"title\": \"Merge canary into main\", \"head\": \"canary\", \"base\": \"main\", \"body\": \"This PR was automatically created to merge changes from canary into main.\"}"
+            -d "{\"title\": \"ci: merge canary into main\", \"head\": \"canary\", \"base\": \"main\", \"body\": \"This PR was automatically created to merge changes from canary into main.\"}"
 
       - name: Log existing PR
-        if: steps.check-pr.outputs.pr_exists == 'true'
+        if: steps.check-if-pr-exists.outputs.pr_exists == 'true'
         run: |
-          echo "Pull request #${{ steps.check-pr.outputs.pr_number }} already exists. Skipping creation."
+          echo "Pull request #${{ steps.check-if-pr-exists.outputs.pr_number }} already exists. Skipping creation."
