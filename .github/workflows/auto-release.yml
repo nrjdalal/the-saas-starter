@@ -35,31 +35,27 @@ jobs:
       - name: Update changelog branch from main
         id: update-changelog
         run: |
+          git checkout main
           git fetch origin changelog --tags || true
 
-          # Get the last tag
+          # Get last tag
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
           # Checkout or create changelog branch
-          if git show-ref --verify --quiet refs/remotes/origin/changelog; then
-            git checkout changelog
-            git merge main --no-edit || true
-          else
-            git checkout -b changelog main
-          fi
+          git checkout changelog 2>/dev/null || git checkout -b changelog main
 
-          # Run changelogen with --from to only get new commits since last tag
+          # Generate changelog and bump version
           if [ -n "$LAST_TAG" ]; then
             bunx changelogen --from "$LAST_TAG" --bump --no-commit || true
           else
             bunx changelogen --bump --no-commit || true
           fi
 
-          # Commit changes if any
+          # Commit and force push
           if [ -n "$(git status --porcelain CHANGELOG.md package.json)" ]; then
             git add CHANGELOG.md package.json
-            git commit -m "chore: update changelog and bump version"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git changelog
+            git commit -m "ci(changelog): update changelog and bump version"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git changelog --force
             echo "has_changes=true" >> $GITHUB_OUTPUT
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
@@ -68,7 +64,6 @@ jobs:
       - name: Create PR from changelog to canary
         if: steps.update-changelog.outputs.has_changes == 'true'
         run: |
-          # Check if PR already exists
           PR_RESPONSE=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:changelog&base=canary&state=open")
 
@@ -84,71 +79,3 @@ jobs:
           else
             echo "PR from changelog to canary already exists: #$PR_NUMBER"
           fi
-
-  create-release:
-    name: Create GitHub Release
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'canary'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Get version from canary
-        id: get-version
-        run: |
-          git checkout canary
-          git fetch origin canary
-          VERSION=$(bunx fx 'x => x.version' package.json)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
-
-      - name: Create GitHub Release
-        run: |
-          git checkout canary
-          VERSION="${{ steps.get-version.outputs.version }}"
-
-          # Extract changelog content for this version
-          CHANGELOG_CONTENT=$(awk -v version="$VERSION" '
-            /^## / { 
-              if (found && /^## /) exit
-              if ($0 ~ version || $0 ~ "v" version || $0 ~ "\\[" version "\\]") {
-                found=1
-                next
-              }
-            }
-            found { print }
-          ' CHANGELOG.md)
-
-          # If no content found, use a default message
-          if [ -z "$CHANGELOG_CONTENT" ]; then
-            CHANGELOG_CONTENT="Release notes for version ${VERSION}"
-          fi
-
-          # Create GitHub release payload using fx and save
-          # Write changelog to file and use node to properly escape it
-          echo "$CHANGELOG_CONTENT" > /tmp/changelog-body.txt
-          ESCAPED_BODY=$(node -e "console.log(JSON.stringify(require('fs').readFileSync('/tmp/changelog-body.txt', 'utf8')))")
-
-          # Create JSON payload using fx
-          echo "{\"body\":${ESCAPED_BODY}}" | bunx fx "x => ({
-            ...x,
-            tag_name: 'v${VERSION}',
-            name: 'v${VERSION}',
-            draft: false,
-            prerelease: false
-          })" save /tmp/release-payload.json
-
-          curl -sL -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/releases" \
-            -d @/tmp/release-payload.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
