@@ -1,0 +1,40 @@
+name: auto-release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ["main"]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+
+jobs:
+  auto-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Get version from package.json
+        id: get-version
+        run: |
+          VERSION=$(bunx fx 'x => x.version' package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Creating release for version: $VERSION"
+
+      - name: Create GitHub Release
+        run: |
+          bunx changelogen gh release ${{ steps.get-version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
