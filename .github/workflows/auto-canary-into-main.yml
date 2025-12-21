@@ -41,6 +41,18 @@ jobs:
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
           fi
 
+      - name: Generate changelog and bump version
+        if: steps.check-if-pr-exists.outputs.pr_exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          bunx changelogen --bump --no-commit || true
+          if [ -n "$(git status --porcelain)" ]; then
+            git add CHANGELOG.md package.json
+            git commit -m "chore: update changelog and bump version"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git canary
+          fi
+
       - name: Create Pull Request
         if: steps.check-if-pr-exists.outputs.pr_exists == 'false'
         run: |
