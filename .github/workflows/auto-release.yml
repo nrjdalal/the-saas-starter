@@ -36,51 +36,35 @@ jobs:
         id: update-changelog
         run: |
           git checkout main
-          git fetch origin changelog --tags || true
+          git fetch --tags origin || true
+          git fetch origin changelog || true
 
-          # Preserve existing CHANGELOG.md and get last version tag
+          FROM_COMMIT=$(git log -1 --format="%H" -- CHANGELOG.md 2>/dev/null || echo "")
+          if [ -z "$FROM_COMMIT" ] || ! git rev-parse "$FROM_COMMIT" >/dev/null 2>&1; then
+            FROM_COMMIT=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            [ -z "$FROM_COMMIT" ] || git rev-parse "$FROM_COMMIT" >/dev/null 2>&1 || FROM_COMMIT=""
+          fi
+
           if git show-ref --verify --quiet refs/remotes/origin/changelog; then
             git checkout changelog
-            if [ -f CHANGELOG.md ]; then
-              cp CHANGELOG.md /tmp/existing-changelog.md
-              # Extract last version tag from changelog (e.g., "## v0.0.3" -> "v0.0.3")
-              LAST_VERSION_LINE=$(awk '/^## / {print; exit}' /tmp/existing-changelog.md)
-              LAST_VERSION_TAG=$(echo "$LAST_VERSION_LINE" | sed 's/^## //' | sed 's/\[//' | sed 's/\]//' | tr -d ' ')
-            fi
+            [ -f CHANGELOG.md ] && cp CHANGELOG.md /tmp/existing-changelog.md
             git reset --hard main
-            # Restore CHANGELOG.md
-            if [ -f /tmp/existing-changelog.md ]; then
-              mv /tmp/existing-changelog.md CHANGELOG.md
-            fi
+            [ -f /tmp/existing-changelog.md ] && mv /tmp/existing-changelog.md CHANGELOG.md
           else
             git checkout -b changelog main
-            LAST_VERSION_TAG=""
           fi
 
-          # Use last version tag as --from, or latest git tag
-          FROM_TAG="$LAST_VERSION_TAG"
-          if [ -z "$FROM_TAG" ] || ! git rev-parse "$FROM_TAG" >/dev/null 2>&1; then
-            FROM_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          fi
+          CHANGELOGEN_CMD="bunx changelogen --bump --no-commit --no-output"
+          [ -n "$FROM_COMMIT" ] && CHANGELOGEN_CMD="$CHANGELOGEN_CMD --from $FROM_COMMIT"
+          $CHANGELOGEN_CMD > /tmp/new-changelog.md 2>/dev/null || true
 
-          # Generate changelog only for commits after FROM_TAG
-          if [ -n "$FROM_TAG" ]; then
-            bunx changelogen --from "$FROM_TAG" --bump --no-commit --no-output > /tmp/new-changelog.md 2>/dev/null || true
-          else
-            bunx changelogen --bump --no-commit --no-output > /tmp/new-changelog.md 2>/dev/null || true
-          fi
-
-          # Extract only the new version section and prepend to existing changelog
-          if [ -f /tmp/new-changelog.md ] && [ -s /tmp/new-changelog.md ]; then
+          if [ -s /tmp/new-changelog.md ]; then
             NEW_VERSION=$(awk '/^## / {if (found && /^## /) exit; found=1} found' /tmp/new-changelog.md)
-            if [ -n "$NEW_VERSION" ] && [ -f CHANGELOG.md ] && [ -s CHANGELOG.md ]; then
-              printf "%s\n\n%s" "$NEW_VERSION" "$(cat CHANGELOG.md)" > CHANGELOG.md
-            elif [ -n "$NEW_VERSION" ]; then
-              echo "$NEW_VERSION" > CHANGELOG.md
+            if [ -n "$NEW_VERSION" ]; then
+              [ -s CHANGELOG.md ] && printf "%s\n\n%s" "$NEW_VERSION" "$(cat CHANGELOG.md)" > CHANGELOG.md || echo "$NEW_VERSION" > CHANGELOG.md
             fi
           fi
 
-          # Commit and force push
           if [ -n "$(git status --porcelain CHANGELOG.md package.json)" ]; then
             git add CHANGELOG.md package.json
             git commit -m "ci(changelog): update changelog and bump version"
