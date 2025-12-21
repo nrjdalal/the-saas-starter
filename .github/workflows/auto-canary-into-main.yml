@@ -1,4 +1,4 @@
-name: auto-canary-to-main
+name: auto-canary-into-main
 
 on:
   push:
@@ -13,9 +13,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  auto-canary-to-main:
+  auto-canary-into-main:
+    name: Auto create PR to merge canary into main
     runs-on: ubuntu-latest
-    name: Auto merge canary into main
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -44,7 +44,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/pulls" \
-            -d "{\"title\": \"ci: merge canary into main\", \"head\": \"canary\", \"base\": \"main\", \"body\": \"This PR was automatically created to merge changes from canary into main.\"}"
+            -d "{\"title\": \"ci(release): merge canary into main\", \"head\": \"canary\", \"base\": \"main\", \"body\": \"This PR was automatically created to merge changes from canary into main.\"}"
 
       - name: Log existing PR
         if: steps.check-if-pr-exists.outputs.pr_exists == 'true'
