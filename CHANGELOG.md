@@ -1,7 +1,5 @@
 ## v0.0.2
 
-[compare changes](https://github.com/nrjdalal/zerostarter/compare/v0.0.3...v0.0.2)
-
 ### 🏡 Chore
 
 - Draft changelog pr by default ([14a15d3](https://github.com/nrjdalal/zerostarter/commit/14a15d3))
