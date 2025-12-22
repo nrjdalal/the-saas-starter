@@ -1,4 +1,3 @@
-
 ## v0.0.3
 
 [compare changes](https://github.com/nrjdalal/zerostarter/compare/27d208db791baaf33eabd48b358abbba171fd6ad...v0.0.3)
@@ -13,7 +12,6 @@
 - Neeraj Dalal <admin@nrjdalal.com>
 
 ## v0.0.2
-
 
 ### 🚀 Enhancements
 
@@ -215,4 +213,3 @@
 ### ❤️ Contributors
 
 - Neeraj Dalal <admin@nrjdalal.com>
-
