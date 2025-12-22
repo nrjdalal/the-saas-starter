@@ -31,7 +31,6 @@ export function CopyAsMarkdown({ url }: CopyAsMarkdownProps) {
 
       await navigator.clipboard.writeText(markdown)
       setIsCopied(true)
-      toast.success("Copied as markdown")
 
       setTimeout(() => {
         setIsCopied(false)
