@@ -1,0 +1,21 @@
+---
+title: Type-Safe API Client
+description: Learn how to use the type-safe API client with Hono RPC.
+---
+
+## Type-Safe API Client
+
+This starter utilizes [Hono RPC](https://hono.dev/docs/guides/rpc) to provide end-to-end type safety between the backend and frontend.
+
+- **Backend**: Routes defined in `api/hono/src/routers` are exported as `AppType` at `api/hono/src/index.ts`.
+- **Frontend**: The client at `web/next/src/lib/api/client.ts` infers `AppType` request/response types using `hono/client`.
+
+### Usage Example
+
+```ts
+import { apiClient } from "@/lib/api/client"
+
+// Fully typed request and response
+const res = await apiClient.health.$get()
+const data = await res.json()
+```
