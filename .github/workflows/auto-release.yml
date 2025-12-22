@@ -40,9 +40,9 @@ jobs:
           git branch -D changelog 2>/dev/null || true
           git checkout -b changelog
           if [ -n "$FROM_COMMIT" ]; then
-            bunx changelogen --bump --from "$FROM_COMMIT" || true
+            bunx changelogen --bump --from "$FROM_COMMIT" --no-commit || true
           else
-            bunx changelogen --bump || true
+            bunx changelogen --bump --no-commit || true
           fi
           if [ -n "$(git status --porcelain CHANGELOG.md package.json)" ]; then
             git add CHANGELOG.md package.json
