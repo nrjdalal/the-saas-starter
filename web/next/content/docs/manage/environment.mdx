@@ -60,21 +60,22 @@ import { env } from "@packages/env/api-hono"
 import { env } from "@packages/env/web-next"
 ```
 
-## Configuration
+## Creating and Managing
 
-1. Create a `.env` file at the project root
-2. Add all required variables (see `.env.example`)
-3. Each package automatically validates only what it needs at runtime
-4. Validation errors show exactly which variables are missing or invalid
+1. **Create `.env` file**: Copy `.env.example` to `.env` at the project root
+2. **Add variables**: Fill in all required variables (see `.env.example` for reference)
+3. **Add new variables**:
+   - Add to `.env` file
+   - Define in the appropriate package's env file (`packages/env/src/*.ts`)
+   - Add to `server` or `client` schema with Zod validation
+4. **Validation**: Each package validates only its declared variables at runtime
 
 ## Features
 
-- **Type Safety**: Full TypeScript inference from Zod schemas
-- **Runtime Validation**: Catches missing/invalid variables on startup
-- **Selective Access**: Packages only see variables they declare
-- **Skip Validation**: Set `SKIP_ENV_VALIDATION=true` to bypass (useful for CI)
-- **Auto-loading**: Root `.env` is automatically loaded by the utils module
-- **Server/Client Separation**: Server variables are never exposed to the client. Only `NEXT_PUBLIC_*` variables are available in browser code, ensuring secrets stay secure
+- Type-safe with TypeScript inference
+- Runtime validation with clear error messages
+- Selective access per package
+- Server/client separation (only `NEXT_PUBLIC_*` exposed to browser)
 
 ## Required Variables
 
