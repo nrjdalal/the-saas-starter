@@ -25,6 +25,17 @@ const deployment = [
   },
 ]
 
+const manage = [
+  {
+    title: "Environment",
+    url: "/docs/manage/environment",
+  },
+  {
+    title: "Release",
+    url: "/docs/manage/release",
+  },
+]
+
 export function SidebarDocs() {
   const pathname = usePathname()
 
@@ -35,6 +46,24 @@ export function SidebarDocs() {
         <SidebarMenu>
           {gettingStarted.map((link) => {
             const isActive = pathname === link.url || pathname === link.url + "/"
+
+            return (
+              <SidebarMenuItem key={link.url}>
+                <SidebarMenuButton asChild isActive={isActive}>
+                  <Link href={link.url}>
+                    <span>{link.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )
+          })}
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel className="pl-2.5">Manage</SidebarGroupLabel>
+        <SidebarMenu>
+          {manage.map((link) => {
+            const isActive = pathname === link.url || pathname?.startsWith(link.url + "/")
 
             return (
               <SidebarMenuItem key={link.url}>

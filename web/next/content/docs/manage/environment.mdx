@@ -1,0 +1,82 @@
+---
+title: Environment Variables
+description: Configure type-safe environment variables for your application.
+---
+
+## Overview
+
+This project uses a centralized, type-safe environment variable system. There's **one `.env` file to rule them all** at the project root, but each package only gets what it asks for through validation.
+
+## How It Works
+
+### Single Source of Truth
+
+All environment variables are stored in a single `.env` file at the project root. The `@packages/env` package automatically loads this file using `dotenv` configured in `packages/env/src/lib/utils.ts`.
+
+### Package-Specific Validation
+
+Each package defines only the environment variables it needs:
+
+- **`api-hono`**: `HONO_APP_URL`, `HONO_TRUSTED_ORIGINS`
+- **`auth`**: `BETTER_AUTH_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `HONO_APP_URL`, `HONO_TRUSTED_ORIGINS`
+- **`db`**: `POSTGRES_URL`
+- **`web-next`**:
+  - **Server**: `INTERNAL_API_URL` (server-side only)
+  - **Client**: `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_API_URL` (exposed to browser)
+
+**Important**: Server variables cannot be used on the client. Only variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. This prevents sensitive data like secrets and API keys from being exposed in client-side code.
+
+### Implementation
+
+Each package uses `@t3-oss/env-core` with Zod schemas for type-safe validation:
+
+```ts
+// packages/env/src/api-hono.ts
+
+import { createEnv } from "@t3-oss/env-core"
+import { z } from "zod"
+import "./lib/utils" // Loads root .env
+
+export const env = createEnv({
+  server: {
+    HONO_APP_URL: z.url(),
+    HONO_TRUSTED_ORIGINS: z.string().transform(...),
+  },
+  runtimeEnv: {
+    HONO_APP_URL: process.env.HONO_APP_URL,
+    HONO_TRUSTED_ORIGINS: process.env.HONO_TRUSTED_ORIGINS,
+  },
+})
+```
+
+### Usage in Packages
+
+Import the specific env for your package:
+
+```ts
+// api/hono/src/index.ts
+import { env } from "@packages/env/api-hono"
+// web/next/src/lib/config.ts
+import { env } from "@packages/env/web-next"
+```
+
+## Creating and Managing
+
+1. **Create `.env` file**: Copy `.env.example` to `.env` at the project root
+2. **Add variables**: Fill in all required variables (see `.env.example` for reference)
+3. **Add new variables**:
+   - Add to `.env` file
+   - Define in the appropriate package's env file (`packages/env/src/*.ts`)
+   - Add to `server` or `client` schema with Zod validation
+4. **Validation**: Each package validates only its declared variables at runtime
+
+## Features
+
+- Type-safe with TypeScript inference
+- Runtime validation with clear error messages
+- Selective access per package
+- Server/client separation (only `NEXT_PUBLIC_*` exposed to browser)
+
+## Required Variables
+
+See the root `.env.example` for all required environment variables. Each package validates only its subset, so you can have all variables in one place without exposing unnecessary ones to each package.
