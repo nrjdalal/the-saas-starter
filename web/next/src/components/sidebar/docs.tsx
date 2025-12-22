@@ -16,6 +16,26 @@ const gettingStarted = [
     title: "Introduction",
     url: "/docs",
   },
+  {
+    title: "Architecture",
+    url: "/docs/getting-started/architecture",
+  },
+  {
+    title: "Project Structure",
+    url: "/docs/getting-started/project-structure",
+  },
+  {
+    title: "Type-Safe API Client",
+    url: "/docs/getting-started/type-safe-api",
+  },
+  {
+    title: "Installation",
+    url: "/docs/getting-started/installation",
+  },
+  {
+    title: "Scripts",
+    url: "/docs/getting-started/scripts",
+  },
 ]
 
 const deployment = [
@@ -105,6 +125,21 @@ export function SidebarDocs() {
               </SidebarMenuItem>
             )
           })}
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel className="pl-2.5">MIT</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname === "/docs/contributing" || pathname === "/docs/contributing/"}
+            >
+              <Link href="/docs/contributing">
+                <span>Contributing</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
     </>
