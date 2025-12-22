@@ -1,3 +1,17 @@
+## v0.0.3
+
+[compare changes](https://github.com/nrjdalal/zerostarter/compare/8109f98b2a934d5180c13112814d0d8296c46b06...v0.0.3)
+
+### 🏡 Chore
+
+- Update architecture diagram ([36cc243](https://github.com/nrjdalal/zerostarter/commit/36cc243))
+- Remove author email ([cdee3fd](https://github.com/nrjdalal/zerostarter/commit/cdee3fd))
+- Hide author email ([b0bde7f](https://github.com/nrjdalal/zerostarter/commit/b0bde7f))
+
+### ❤️ Contributors
+
+- Neeraj Dalal
+
 ## v0.0.2
 
 ### 🏡 Chore
@@ -10,4 +24,4 @@
 
 ### ❤️ Contributors
 
-- Neeraj Dalal <admin@nrjdalal.com>
+- Neeraj Dalal
