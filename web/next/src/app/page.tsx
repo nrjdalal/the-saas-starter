@@ -1,9 +1,22 @@
 import Link from "next/link"
 
-import { ArrowRight, CheckCircle2, Code2, Database, Lock, Sparkles, Zap } from "lucide-react"
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  Code2,
+  Database,
+  FileText,
+  GitBranch,
+  Lock,
+  Search,
+  Sparkles,
+  Zap,
+} from "lucide-react"
 
+import { config } from "@/lib/config"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function Home() {
   return (
@@ -14,8 +27,7 @@ export default function Home() {
         <div className="relative z-10 container mx-auto max-w-6xl px-5">
           <div className="mx-auto max-w-3xl text-center">
             <div className="bg-muted/50 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm">
-              <Sparkles className="size-4" />
-              <span>ZeroStarter</span>
+              <span>{config.app.name}</span>
             </div>
             <h1 className="mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               The{" "}
@@ -25,22 +37,17 @@ export default function Home() {
               Starter
             </h1>
             <p className="text-muted-foreground mb-8 text-lg sm:text-xl">
-              A modern, type-safe, and high-performance SaaS starter template built with a monorepo
-              architecture.
+              {config.app.description}
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button asChild size="lg" className="group">
                 <Link href="/docs">
-                  Get Started
+                  Documentation
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <a
-                  href="https://github.com/nrjdalal/zerostarter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={config.social.github} target="_blank" rel="noopener noreferrer">
                   View on GitHub
                 </a>
               </Button>
@@ -128,6 +135,78 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
             </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <FileText className="text-primary size-6" />
+                </div>
+                <CardTitle>Type-Safe Environment</CardTitle>
+                <CardDescription>
+                  Centralized environment variables with validation. One env file, selective access
+                  per package.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <BookOpen className="text-primary size-6" />
+                </div>
+                <CardTitle>Documentation & llms.txt</CardTitle>
+                <CardDescription>
+                  Fumadocs with auto-generated llms.txt endpoint. Full-text search and structured
+                  content for AI assistants.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <GitBranch className="text-primary size-6" />
+                </div>
+                <CardTitle>Automated Releases</CardTitle>
+                <CardDescription>
+                  Automated changelog generation and release workflow. Draft PRs for canary to main
+                  and changelog updates.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <Search className="text-primary size-6" />
+                </div>
+                <CardTitle>Full-Text Search</CardTitle>
+                <CardDescription>
+                  Built-in search for docs and blog powered by Fumadocs. Fast and accurate content
+                  discovery.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-6" />
+                </div>
+                <CardTitle>Validation & DevTools</CardTitle>
+                <CardDescription>
+                  Zod validation throughout. React Query DevTools for debugging. Oxlint and Prettier
+                  for code quality.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <Sparkles className="text-primary size-6" />
+                </div>
+                <CardTitle>OG Image Generation</CardTitle>
+                <CardDescription>
+                  Dynamic Open Graph image generation for SEO. Automatic image creation for blog and
+                  docs pages.
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </section>
@@ -140,7 +219,7 @@ export default function Home() {
               Built with Best-in-Class Tools
             </h2>
             <p className="text-muted-foreground mx-auto max-w-2xl">
-              Carefully selected stack for modern SaaS development
+              Carefully selected stack for modern SaaS development.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -153,6 +232,10 @@ export default function Home() {
               { name: "Better Auth", desc: "Authentication" },
               { name: "Shadcn UI", desc: "UI Components" },
               { name: "TanStack Query", desc: "Data Fetching" },
+              { name: "Zod", desc: "Validation" },
+              { name: "Fumadocs", desc: "Documentation" },
+              { name: "tsdown", desc: "Bundling" },
+              { name: "Oxlint", desc: "Linting" },
             ].map((tech) => (
               <div
                 key={tech.name}
@@ -177,25 +260,23 @@ export default function Home() {
               Full type inference from backend to frontend. No more manual type definitions.
             </p>
           </div>
-          <Card className="mx-auto max-w-3xl">
-            <CardContent className="pt-6">
-              <pre className="bg-muted overflow-x-auto rounded-lg p-6 text-sm">
-                <code className="text-foreground">
-                  {`import { apiClient } from "@/lib/api/client"
+        </div>
+        <div className="w-full px-5">
+          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg p-6 text-sm">
+            <code className="block overflow-x-auto whitespace-pre">
+              {`import { apiClient } from "@/lib/api/client"
 
 // Fully typed request and response
 const res = await apiClient.health.$get()
 const data = await res.json()`}
-                </code>
-              </pre>
-            </CardContent>
-          </Card>
+            </code>
+          </pre>
         </div>
       </section>
 
       {/* Getting Started Section */}
       <section className="border-b py-24">
-        <div className="container mx-auto max-w-4xl px-5">
+        <div className="container mx-auto max-w-6xl px-5">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
               Get Started in Minutes
@@ -204,12 +285,12 @@ const data = await res.json()`}
               Clone, install, and start building. It's that simple.
             </p>
           </div>
-          <Card>
-            <CardContent className="pt-6">
-              <pre className="bg-muted overflow-x-auto rounded-lg p-6 text-sm">
-                <code className="text-foreground">
-                  {`# Clone the template
-bunx gitpick https://github.com/nrjdalal/zerostarter
+        </div>
+        <div className="w-full px-5">
+          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg p-6 text-sm">
+            <code className="block overflow-x-auto whitespace-pre">
+              {`# Clone the template
+bunx gitpick ${config.social.github}
 cd zerostarter
 
 # Install dependencies
@@ -223,18 +304,16 @@ bun run db:migrate
 
 # Start development servers
 bun dev`}
-                </code>
-              </pre>
-            </CardContent>
-          </Card>
-          <div className="mt-8 text-center">
-            <Button asChild size="lg">
-              <Link href="/docs">
-                Read Full Documentation
-                <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </div>
+            </code>
+          </pre>
+        </div>
+        <div className="container mx-auto mt-8 max-w-6xl px-5 text-center">
+          <Button asChild size="lg" className="group">
+            <Link href="/docs">
+              Documentation
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
         </div>
       </section>
 
@@ -245,21 +324,17 @@ bun dev`}
             Ready to Build Your SaaS?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-            Start building your next project with ZeroStarter today.
+            Start building your next project with {config.app.name} today.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="group">
               <Link href="/docs">
-                Get Started
-                <ArrowRight className="ml-2 size-4" />
+                Documentation
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a
-                href="https://github.com/nrjdalal/zerostarter"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={config.social.github} target="_blank" rel="noopener noreferrer">
                 Star on GitHub
               </a>
             </Button>

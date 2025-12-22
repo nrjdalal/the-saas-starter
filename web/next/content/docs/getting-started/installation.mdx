@@ -1,0 +1,100 @@
+---
+title: Installation
+description: Step-by-step guide to install and set up ZeroStarter.
+---
+
+## Overview
+
+This guide will walk you through installing and setting up ZeroStarter on your local machine. You'll learn how to clone the repository, install dependencies, configure environment variables, set up the database, and configure authentication.
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (v1.3.0 or later)
+
+### Installation
+
+1. Clone this template:
+
+   ```bash
+   bunx gitpick https://github.com/nrjdalal/zerostarter/tree/main
+   cd zerostarter
+   ```
+
+   > **Note**: The `main` branch is the latest stable release.
+
+2. Install dependencies:
+
+   ```bash
+   bun install
+   ```
+
+   > **Note**: If the installation fails, try using `bun install --ignore-scripts`
+
+3. Set up environment variables:
+
+   Create a `.env` file in the root directory with the following variables:
+
+   ```
+   # -------------------- Server variables --------------------
+
+   HONO_APP_URL=http://localhost:4000
+   HONO_TRUSTED_ORIGINS=http://localhost:3000
+
+   # Generate using `openssl rand -base64 32`
+   BETTER_AUTH_SECRET=
+
+   # Generate at `https://github.com/settings/developers`
+   GITHUB_CLIENT_ID=
+   GITHUB_CLIENT_SECRET=
+
+   # Generate using `bunx pglaunch -k`
+   POSTGRES_URL=
+
+   # -------------------- Client variables --------------------
+
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   NEXT_PUBLIC_API_URL=http://localhost:4000
+   ```
+
+### Database Setup
+
+1. Ensure your PostgreSQL server is running.
+2. Run the generation:
+
+   ```bash
+   bun run db:generate
+   ```
+
+3. Run the migration:
+
+   ```bash
+   bun run db:migrate
+   ```
+
+### Authentication Setup
+
+This starter uses [Better Auth](https://better-auth.com) with GitHub as the provider.
+
+1. Create a GitHub OAuth App at [GitHub Developer Settings](https://github.com/settings/developers).
+2. Set the **Homepage URL** to `http://localhost:3000`.
+3. Set the **Authorization callback URL** to `http://localhost:3000/api/auth/callback/github`.
+4. Copy the **Client ID** and **Client Secret** into your `.env` file.
+
+### Running the Application
+
+```bash
+bun dev
+```
+
+### Running the Application with Docker Compose
+
+```bash
+docker compose up
+```
+
+### Accessing the Application
+
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend: [http://localhost:4000](http://localhost:4000)

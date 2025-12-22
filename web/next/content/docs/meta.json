@@ -1,3 +1,17 @@
 {
-  "pages": ["index", "deployment/vercel"]
+  "pages": [
+    "index",
+    "getting-started/architecture",
+    "getting-started/project-structure",
+    "getting-started/type-safe-api",
+    "getting-started/installation",
+    "getting-started/scripts",
+    "manage/blog",
+    "manage/documentation",
+    "manage/environment",
+    "manage/llms-txt",
+    "manage/release",
+    "deployment/vercel",
+    "contributing"
+  ]
 }

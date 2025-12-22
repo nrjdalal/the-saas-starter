@@ -1,0 +1,25 @@
+---
+title: Project Structure
+description: Understand the monorepo structure and organization of ZeroStarter.
+---
+
+## Overview
+
+ZeroStarter uses a monorepo architecture to organize code into logical packages. This structure enables code sharing, type safety, and efficient development workflows.
+
+## Project Structure
+
+This project is a monorepo organized as follows:
+
+```
+.
+├── api/
+│   └── hono/      # Backend API server (Hono)
+├── web/
+│   └── next/      # Frontend application (Next.js)
+└── packages/
+    ├── auth/      # Shared authentication logic (Better Auth)
+    ├── db/        # Database schema and Drizzle configuration
+    ├── env/       # Type-safe environment variables
+    └── tsconfig/  # Shared TypeScript configuration
+```

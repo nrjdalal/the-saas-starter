@@ -1,0 +1,55 @@
+---
+title: Architecture
+description: Learn about the architecture and tech stack used in ZeroStarter.
+---
+
+## Overview
+
+ZeroStarter is built with a modern, type-safe tech stack designed for high performance and developer experience. This page covers all the technologies and tools used in the project.
+
+## Architecture and Tech Stack
+
+![Graph Build](../../../../../.github/assets/graph-build.svg)
+
+- **Runtime & Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
+- **Frontend**: [Next.js 16](https://nextjs.org)
+- **Backend**: [Hono](https://hono.dev)
+- **RPC**: [Hono Client](https://hono.dev/docs/guides/rpc) for end-to-end type safety with frontend client
+- **Database**: [PostgreSQL](https://www.postgresql.org) with [Drizzle ORM](https://orm.drizzle.team)
+- **Authentication**: [Better Auth](https://better-auth.com)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **UI Components**: [Shadcn UI](https://ui.shadcn.com)
+- **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
+- **Validation**: [Zod](https://zod.dev)
+- **Bundling, Linting & Formatting**: [tsdown](https://tsdown.dev), [Oxlint](https://oxc.rs/docs/guide/usage/linter) and [Prettier](https://prettier.io)
+- **Documentation**: [Fumadocs](https://fumadocs.dev) with auto-generated [llms.txt](https://zerostarter.dev/llms.txt)
+- **Automated Releases**: Automatically updated [Changelog](https://github.com/nrjdalal/zerostarter/releases) on release
+
+### Future Stack and Features
+
+- **AI**
+  - [ ] [Vercel AI SDK](https://ai-sdk.dev)
+- **Analytics**:
+  - [ ] [Posthog](https://posthog.com)
+- **Background Tasks**:
+  - [ ] [Inngest](https://www.inngest.com)
+  - [ ] [Trigger.dev](https://trigger.dev)
+- **Email**:
+  - [ ] [Resend](https://resend.com)
+  - [ ] [SendGrid](https://sendgrid.com)
+- **OpenAPI**:
+  - [ ] [Scalar](https://scalar.com)
+- **Organization/teams**:
+  - [ ] [Better Auth](https://www.better-auth.com/docs/plugins/organization)
+- **Internationalization**:
+  - [ ] [i18next](https://www.i18next.com)
+  - [ ] [next-intl](https://next-intl.dev)
+- **Payment Processing**:
+  - [ ] [Autumn](https://useautumn.com)
+  - [ ] [Creem](https://www.creem.io)
+  - [ ] [Dodo](https://dodopayments.com)
+  - [ ] [Lemon Squeezy](https://www.lemonsqueezy.com)
+  - [ ] [Paddle](https://www.paddle.com)
+  - [ ] [Polar](https://polar.sh)
+  - [ ] [Razorpay](https://razorpay.com)
+  - [ ] [Stripe](https://stripe.com)

@@ -1,0 +1,32 @@
+---
+title: Scripts
+description: Available scripts for development, maintenance, and production.
+---
+
+## Overview
+
+ZeroStarter provides a comprehensive set of scripts for development, maintenance, and production workflows. These scripts are defined in the root `package.json` and can be run using `bun run <script-name>`.
+
+## Scripts
+
+### Development
+
+- `bun run dev`: Start the development servers.
+
+### Maintenance
+
+- `bun run clean`: Clean the cache and build artifacts.
+- `bun run lint`: Lint the codebase using Oxlint.
+- `bun run format`: Format the codebase using Prettier.
+- `bun run check-types`: Check the types of the codebase.
+
+### Production
+
+- `bun run build`: Build the applications.
+- `bun run start`: Start the production servers.
+
+### Database
+
+- `bun run db:generate`: Generate Drizzle migrations.
+- `bun run db:migrate`: Run Drizzle migrations.
+- `bun run db:studio`: Open Drizzle Studio to view/edit data.

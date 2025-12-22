@@ -2,20 +2,26 @@
 
 A modern, type-safe, and high-performance SaaS starter template built with a monorepo architecture.
 
+[![Twitter](https://img.shields.io/twitter/follow/nrjdalal?label=%40nrjdalal)](https://twitter.com/nrjdalal)
+[![GitHub stars](https://img.shields.io/github/stars/nrjdalal/zerostarter?color=blue)](https://github.com/nrjdalal/zerostarter)
+
 <!--
 ```bash
 npx turbo run build --graph=graph.svg
 sed -i '' 's/\[root\] //g; s/#build//g; s/___ROOT___/ZeroStarter/g' graph.svg
+sed -i '' 's/fill="white"/fill="none"/g; s/fill="#ffffff"/fill="none"/g; s/fill="#fff"/fill="none"/g' graph.svg
+sed -i '' 's/fill="black"/fill="#1f6feb"/g' graph.svg
+sed -i '' 's/stroke="[^"]*"/stroke="#1f6feb"/g; s/stroke:[^;]*;/stroke:#1f6feb;/g' graph.svg
+sed -i '' 's/<text\([^>]*\)>/<text\1 fill="#1f6feb">/g' graph.svg
+sed -i '' 's/stroke="#1f6feb" points="-4,4/stroke="none" points="-4,4/g' graph.svg
 mkdir -p .github/assets
 mv graph.svg .github/assets/graph-build.svg
 ```
 -->
 
+## Architecture and Tech Stack
+
 ![Graph Build](./.github/assets/graph-build.svg)
-
----
-
-## Tech Stack
 
 - **Runtime & Build System**: [Bun](https://bun.sh) + [Turborepo](https://turbo.build)
 - **Frontend**: [Next.js 16](https://nextjs.org)
@@ -27,8 +33,9 @@ mv graph.svg .github/assets/graph-build.svg
 - **UI Components**: [Shadcn UI](https://ui.shadcn.com)
 - **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
 - **Validation**: [Zod](https://zod.dev)
-- **Linting & Formatting**: [Oxlint](https://oxc.rs/docs/guide/usage/linter) + [Prettier](https://prettier.io)
+- **Bundling, Linting & Formatting**: [tsdown](https://tsdown.dev), [Oxlint](https://oxc.rs/docs/guide/usage/linter) and [Prettier](https://prettier.io)
 - **Documentation**: [Fumadocs](https://fumadocs.dev) with auto-generated [llms.txt](https://zerostarter.dev/llms.txt)
+- **Automated Releases**: Automatically updated [Changelog](https://github.com/nrjdalal/zerostarter/releases) on release
 
 ### Future Stack and Features
 
@@ -110,15 +117,19 @@ const data = await res.json()
 1. Clone this template:
 
    ```bash
-   bunx gitpick https://github.com/nrjdalal/zerostarter
+   bunx gitpick https://github.com/nrjdalal/zerostarter/tree/main
    cd zerostarter
    ```
+
+   > **Note**: The `main` branch is the latest stable release.
 
 2. Install dependencies:
 
    ```bash
    bun install
    ```
+
+   > **Note**: If the installation fails, try using `bun install --ignore-scripts`
 
 3. Set up environment variables:
 
@@ -222,8 +233,23 @@ docker compose up
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions welcome — any help is appreciated!
+
+- Fork the repo and create a branch (use descriptive names, e.g. `feat/{name}` or `fix/{name}`).
+- Make your changes, add tests if applicable, and run the checks:
+  - `bun run build`
+  - `bun run check-types`
+  - `bun run format`
+  - `bun run lint`
+- Follow the existing code style and commit message conventions (use conventional commits: feat, fix, docs, chore).
+- Open a PR describing the change, motivation, and any migration notes; link related issues.
+- For breaking changes or large features, open an issue first to discuss the approach.
+- By contributing you agree to the MIT license and the project's Code of Conduct.
+
+Thank you for helping improve ZeroStarter!
 
 ## 📄 License
 
-This project is licensed under the [MIT](LICENSE.md) License.
+This project is licensed under the [MIT](https://github.com/nrjdalal/zerostarter/blob/canary/LICENSE.md) License.
+
+<!-- trigger build: 4 -->

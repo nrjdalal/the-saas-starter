@@ -1,38 +1,38 @@
 import type { Metadata } from "next"
 
-import { env } from "@packages/env/web-next"
-
+import { config } from "@/lib/config"
 import { Navbar } from "@/components/navbar/home"
 import { InnerProvider, OuterProvider } from "@/app/providers"
 
 import "./globals.css"
 
+const ogImageUrl = `${config.app.url}/api/og/home?t=${Date.now()}`
+
 export const metadata: Metadata = {
   title: {
-    default: "ZeroStarter - The SaaS Starter",
-    template: "%s | ZeroStarter",
+    default: `${config.app.name} - ${config.app.tagline}`,
+    template: `%s | ${config.app.name}`,
   },
-  description:
-    "A modern, type-safe, and high-performance SaaS starter template built with a monorepo architecture.",
+  description: config.app.description,
   openGraph: {
     type: "website",
-    url: env.NEXT_PUBLIC_APP_URL,
-    siteName: "ZeroStarter",
+    siteName: config.app.name,
+    url: config.app.url,
     images: [
       {
-        url: `${env.NEXT_PUBLIC_APP_URL}/api/og?type=home`,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "ZeroStarter - The SaaS Starter",
+        alt: `${config.app.name} - ${config.app.tagline}`,
       },
     ],
   },
   other: {
-    "og:logo": `${env.NEXT_PUBLIC_APP_URL}/favicon.ico`,
+    "og:logo": `${config.app.url}/favicon.ico`,
   },
   twitter: {
     card: "summary_large_image",
-    images: [`${env.NEXT_PUBLIC_APP_URL}/api/og?type=home`],
+    images: [ogImageUrl],
   },
 }
 
