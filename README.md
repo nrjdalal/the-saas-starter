@@ -1,5 +1,3 @@
-+6
-
 # ZeroStarter - The SaaS Starter
 
 A modern, type-safe, and high-performance SaaS starter template built with a monorepo architecture.
