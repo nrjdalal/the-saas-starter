@@ -1,15 +1,44 @@
 import { readFileSync, writeFileSync } from "node:fs"
-import githubUsername from "github-username"
-
-// TODO: AI-generated script, replace later.
+import { Octokit } from "@octokit/rest"
 
 const CHANGELOG_PATH = "CHANGELOG.md"
-const EMAIL_REGEX = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g
+const EMAIL_REGEX = /<([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)>/g
+
+async function searchCommits(octokit: Octokit, email: string): Promise<string | null> {
+  const { data } = await octokit.search.commits({
+    q: `author-email:${email}`,
+    sort: "author-date",
+    per_page: 1,
+  })
+
+  if (data.total_count === 0) {
+    return null
+  }
+
+  return data.items[0]?.author?.login ?? null
+}
 
 async function getUsernameFromEmail(email: string): Promise<string | null> {
   try {
-    const username = await githubUsername(email)
-    return username
+    if (!(typeof email === "string" && email.includes("@"))) {
+      return null
+    }
+
+    const token = process.env.GITHUB_TOKEN
+    const octokit = new Octokit({
+      auth: token,
+      userAgent: "https://github.com/nrjdalal/zerostarter",
+    })
+
+    const { data } = await octokit.search.users({
+      q: `${email} in:email`,
+    })
+
+    if (data.total_count === 0) {
+      return await searchCommits(octokit, email)
+    }
+
+    return data.items[0]?.login ?? null
   } catch {
     return null
   }
@@ -17,58 +46,40 @@ async function getUsernameFromEmail(email: string): Promise<string | null> {
 
 async function processChangelog() {
   const content = readFileSync(CHANGELOG_PATH, "utf-8")
-  const lines = content.split("\n")
-  const updatedLines: string[] = []
-  let inContributorsSection = false
   const emailToUsername = new Map<string, string | null>()
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
+  // Find all unique emails (Set ensures uniqueness)
+  const emails = new Set<string>()
+  let match
+  while ((match = EMAIL_REGEX.exec(content)) !== null) {
+    emails.add(match[1])
+  }
 
-    // Detect contributors section
-    if (line.includes("### ❤️ Contributors")) {
-      inContributorsSection = true
-      updatedLines.push(line)
-      continue
-    }
-
-    // End of contributors section (next section or end of version)
-    if (inContributorsSection && (line.startsWith("##") || line.startsWith("###"))) {
-      inContributorsSection = false
-    }
-
-    if (inContributorsSection && line.trim().startsWith("-")) {
-      // Extract email from line
-      const emailMatch = line.match(EMAIL_REGEX)
-      if (emailMatch) {
-        const email = emailMatch[0]
-
-        // Check cache first
-        if (!emailToUsername.has(email)) {
-          const username = await getUsernameFromEmail(email)
-          emailToUsername.set(email, username)
-        }
-
-        const username = emailToUsername.get(email)
-
-        if (username) {
-          // Replace email with @username
-          const updatedLine = line.replace(EMAIL_REGEX, `@${username}`)
-          updatedLines.push(updatedLine)
-        } else {
-          // Remove the line if username not found
-          console.log(`Skipping ${email} - GitHub username not found`)
-        }
-      } else {
-        // Keep line as is if no email found
-        updatedLines.push(line)
-      }
+  // Look up usernames for each unique email only once
+  for (const email of emails) {
+    const username = await getUsernameFromEmail(email)
+    emailToUsername.set(email, username)
+    if (username) {
+      console.log(`Found @${username} for ${email}`)
     } else {
-      updatedLines.push(line)
+      console.log(`No username found for ${email}`)
     }
   }
 
-  writeFileSync(CHANGELOG_PATH, updatedLines.join("\n"), "utf-8")
+  // Replace emails with usernames
+  let updatedContent = content
+  for (const [email, username] of emailToUsername) {
+    if (username) {
+      updatedContent = updatedContent.replaceAll(`<${email}>`, `@${username}`)
+    } else {
+      updatedContent = updatedContent
+        .split("\n")
+        .filter((line) => !line.includes(`<${email}>`))
+        .join("\n")
+    }
+  }
+
+  writeFileSync(CHANGELOG_PATH, updatedContent, "utf-8")
   console.log("Changelog updated successfully!")
 }
 

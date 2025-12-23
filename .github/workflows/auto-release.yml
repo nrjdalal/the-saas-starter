@@ -50,7 +50,7 @@ jobs:
           fi
           bunx prettier --write CHANGELOG.md
           bun install --ignore-scripts
-          bun .github/scripts/update-changelog-usernames.ts
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} bun .github/scripts/update-changelog-usernames.ts
           if [ -n "$(git status --porcelain CHANGELOG.md package.json)" ]; then
             git add CHANGELOG.md package.json
             git commit -m "ci(changelog): update changelog and bump version"
