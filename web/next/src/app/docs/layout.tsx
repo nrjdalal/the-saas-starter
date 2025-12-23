@@ -14,7 +14,7 @@ import {
 import { SidebarDocs } from "@/components/sidebar/docs"
 import { SidebarTrigger } from "@/components/zeroui/sidebar-trigger"
 
-export default function Layout({ children }: LayoutProps<"/docs">) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar className="md:pt-12" collapsible="offcanvas">
