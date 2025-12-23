@@ -15,7 +15,7 @@ import "./globals.css"
 function getOgImageUrl(): string {
   const staticOgPath = join(process.cwd(), "public", "og", "home.png")
   if (existsSync(staticOgPath)) {
-    return `${config.app.url}/og/home.png`
+    return `${config.app.url}/og/home.png?t=${Date.now()}`
   }
   return `${config.app.url}/api/og/home?t=${Date.now()}`
 }
