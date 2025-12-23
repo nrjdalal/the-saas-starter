@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import githubUsername from "github-username"
 
+// TODO: AI-generated script, replace later.
+
 const CHANGELOG_PATH = "CHANGELOG.md"
 const EMAIL_REGEX = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g
 
