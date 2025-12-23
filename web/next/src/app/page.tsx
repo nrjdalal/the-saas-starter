@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="from-background via-background to-muted/20 relative overflow-hidden border-b bg-linear-to-b pt-38 pb-32">
+      <section className="from-background via-background to-muted/20 relative overflow-hidden border-b bg-gradient-to-b pt-38 pb-32">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,white_70%,transparent_110%)] bg-size-[20px_20px]" />
         <div className="relative z-10 container mx-auto max-w-6xl px-5">
           <div className="mx-auto max-w-3xl text-center">
@@ -322,7 +322,7 @@ bun dev`}
       </section>
 
       {/* Footer CTA */}
-      <section className="from-background to-muted/20 bg-linear-to-b py-24">
+      <section className="from-background to-muted/20 bg-gradient-to-b py-24">
         <div className="container mx-auto max-w-4xl px-5 text-center">
           <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to Build Your SaaS?
