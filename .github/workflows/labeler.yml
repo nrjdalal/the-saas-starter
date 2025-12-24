@@ -16,7 +16,7 @@ permissions:
   pull-requests: write
 
 env:
-  APPROVAL_THRESHOLD: "2"
+  APPROVAL_THRESHOLD: "1"
   TARGET_BRANCH: "canary"
 
 jobs:
@@ -46,12 +46,12 @@ jobs:
             }
 
             // Configuration
-            const topLevelDirs = ['api', 'packages', 'web', 'marketing'];
+            const topLevelDirs = ['api', 'packages', 'marketing', 'web'];
             const colorMap = {
-              'api': '9333ea',        // purple
+              'api': '9333ea',       // purple
+              'marketing': '10b981', // green
               'packages': '3b82f6',  // blue
               'web': 'f97316',       // orange
-              'marketing': '10b981', // green
             };
 
             const { number: prNumber } = pr;
