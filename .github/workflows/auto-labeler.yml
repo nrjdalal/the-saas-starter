@@ -5,21 +5,22 @@ on:
     types: [opened, synchronize, reopened]
     branches: ["canary"]
   pull_request_review:
-    types: [submitted, dismissed]
+    types: [submitted, edited, dismissed]
 
 concurrency: ${{ github.workflow }}-${{ github.event.pull_request.number }}
 
 permissions:
   contents: read
+  pull-requests: read
   issues: write
-  pull-requests: write
 
 env:
   APPROVAL_THRESHOLD: "1"
   TARGET_BRANCH: "canary"
 
 jobs:
-  label-pr:
+  auto-labeler:
+    name: Auto Labeler
     runs-on: ubuntu-latest
     if: github.event.pull_request.base.ref == 'canary'
 
@@ -91,11 +92,33 @@ jobs:
               const fileName = pathParts[pathParts.length - 1];
               const [topLevel, secondLevel] = pathParts;
 
-              if (fileName === 'bun.lock' || fileName === 'bun.lockb' || fileName === 'package.json' || fileName === 'package-lock.json' || fileName === 'pnpm-lock.yaml' || fileName === 'yarn.lock') {
+              const dependencyFiles = [
+                'bun.lock',
+                'bun.lockb',
+                'package.json',
+                'package-lock.json',
+                'pnpm-lock.yaml',
+                'pnpm-workspace.yaml',
+                'yarn.lock',
+                'turbo.json',
+              ];
+              
+              if (dependencyFiles.includes(fileName)) {
                 return '@dependencies';
               }
 
-              if (fileName === 'Dockerfile' || fileName.startsWith('Dockerfile.')) {
+              const dockerFiles = [
+                'docker-compose.yml',
+                'docker-compose.yaml',
+                'compose.yml',
+                'compose.yaml',
+              ];
+
+              if (
+                fileName === 'Dockerfile' ||
+                fileName.startsWith('Dockerfile.') ||
+                dockerFiles.includes(fileName)
+              ) {
                 return '@docker';
               }
 
