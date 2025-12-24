@@ -21,8 +21,6 @@ export function SidebarSearch() {
   const handleClick = () => {
     if (isMobile) {
       setOpenMobile(false)
-      // Fumadocs SearchDialogInput is a plain input inside SearchDialogContent (Radix Dialog)
-      // Try to find the input within the open dialog
       const searchInput =
         (document.querySelector('[role="dialog"] input[type="text"]') as HTMLInputElement) ||
         (document.querySelector('[role="dialog"] input:not([type])') as HTMLInputElement) ||
