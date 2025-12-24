@@ -24,14 +24,12 @@ export function SidebarSearch() {
     const event = new KeyboardEvent("keydown", {
       key: "k",
       code: "KeyK",
-      keyCode: 75,
-      which: 75,
       metaKey: isMac,
       ctrlKey: !isMac,
       bubbles: true,
       cancelable: true,
     })
-    window.dispatchEvent(event)
+    document.dispatchEvent(event)
   }
 
   return (
