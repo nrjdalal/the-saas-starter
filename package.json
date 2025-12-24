@@ -31,6 +31,7 @@
     "postinstall": "bun .github/scripts/deps-manager.ts",
     "lint": "turbo lint --summarize",
     "prepare": "bunx simple-git-hooks",
+    "setup": "bun scripts/setup/index.ts",
     "start": "turbo start"
   },
   "simple-git-hooks": {
@@ -55,6 +56,11 @@
   "prettier": {
     "printWidth": 100,
     "semi": false
+  },
+  "dependencies": {
+    "@inquirer/prompts": "catalog:",
+    "inquirer": "catalog:",
+    "pg": "catalog:"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
@@ -81,6 +87,7 @@
     "@hono/zod-validator": "^0.7.6",
     "@hookform/resolvers": "^5.2.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
+    "@inquirer/prompts": "^8.1.0",
     "@octokit/rest": "^22.0.1",
     "@remixicon/react": "^4.7.0",
     "@t3-oss/env-core": "^0.13.10",
@@ -110,11 +117,13 @@
     "globby": "^16.1.0",
     "hono": "^4.11.1",
     "input-otp": "^1.4.2",
+    "inquirer": "^13.1.0",
     "lint-staged": "^16.2.7",
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",
     "next-themes": "^0.4.6",
     "oxlint": "^1.35.0",
+    "pg": "^8.16.3",
     "postgres": "^3.4.7",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
