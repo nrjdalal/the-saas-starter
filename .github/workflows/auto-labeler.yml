@@ -45,147 +45,126 @@ jobs:
             const path = require('path');
             const { execSync } = require('child_process');
 
-            const TARGET_BRANCH = process.env.TARGET_BRANCH;
-            const pr = context.payload.pull_request;
-
-            // Early exit if PR doesn't target the correct branch
-            if (pr.base.ref !== TARGET_BRANCH) {
-              console.log(`Skipping: PR targets ${pr.base.ref}, not ${TARGET_BRANCH}`);
-              return;
-            }
-
-            // Configuration
-            const topLevelDirs = ['api', 'packages', 'marketing', 'web'];
-            const colorMap = {
-              'api': '9333ea',       // purple
-              'marketing': '10b981', // green
-              'packages': '3b82f6',  // blue
-              'web': 'f97316',       // orange
-              'zero': '6b7280',      // gray - for files not in any package
-            };
-
-            const { number: prNumber } = pr;
+            const { number: prNumber } = context.payload.pull_request;
             const { owner, repo } = context.repo;
 
-            // Find all package.json files using globby via Bun
-            let packageJsonPaths = [];
-            try {
-              // Write a temporary script to use globby
-              const tempScript = `
-                const { globby } = await import('globby');
-                const paths = await globby(['**/package.json'], {
-                  ignore: ['**/node_modules/**', '**/.git/**'],
-                  absolute: false
-                });
-                console.log(JSON.stringify(paths));
-              `;
-              fs.writeFileSync('/tmp/find-packages.mjs', tempScript);
-              const globbyOutput = execSync('bun /tmp/find-packages.mjs', {
-                encoding: 'utf-8',
-                cwd: process.cwd()
-              });
-              packageJsonPaths = JSON.parse(globbyOutput.trim());
-              fs.unlinkSync('/tmp/find-packages.mjs');
-            } catch (error) {
-              // Fallback to find command if globby fails
-              console.warn('globby failed, using find fallback:', error.message);
+            // Configuration
+            const config = {
+              topLevelDirs: ['api', 'packages', 'marketing', 'web'],
+              colors: {
+                api: '9333ea',
+                marketing: '10b981',
+                packages: '3b82f6',
+                web: 'f97316',
+                docker: '0ea5e9',
+                scripts: '8b5cf6',
+                workflows: 'ec4899',
+                docs: '14b8a6',
+                config: '6b7280',
+              },
+            };
+
+            // Find all package.json files
+            const findPackageJsonFiles = () => {
               try {
-                const findOutput = execSync(
+                const tempScript = `
+                  const { globby } = await import('globby');
+                  const paths = await globby(['**/package.json'], {
+                    ignore: ['**/node_modules/**', '**/.git/**'],
+                    absolute: false
+                  });
+                  console.log(JSON.stringify(paths));
+                `;
+                fs.writeFileSync('/tmp/find-packages.mjs', tempScript);
+                const output = execSync('bun /tmp/find-packages.mjs', {
+                  encoding: 'utf-8',
+                  cwd: process.cwd()
+                });
+                fs.unlinkSync('/tmp/find-packages.mjs');
+                return JSON.parse(output.trim());
+              } catch {
+                // Fallback to find command
+                const output = execSync(
                   'find . -name "package.json" -type f -not -path "*/node_modules/*" -not -path "*/.git/*"',
                   { encoding: 'utf-8', cwd: process.cwd() }
                 );
-                packageJsonPaths = findOutput
+                return output
                   .split('\n')
                   .filter(Boolean)
                   .map(p => p.replace(/^\.\//, ''));
-              } catch (findError) {
-                console.error('Error finding package.json files:', findError.message);
               }
-            }
-
-            console.log(`Found ${packageJsonPaths.length} package.json file(s)`);
-
-            // Build a map: file path -> package directory
-            // For each package.json, map all possible file paths that belong to it
-            const pathToPackageMap = new Map();
-
-            for (const packageJsonPath of packageJsonPaths) {
-              const packageDir = path.dirname(packageJsonPath);
-              const pathParts = packageDir.split('/').filter(Boolean);
-              
-              // Only process if in a tracked top-level directory
-              if (pathParts.length >= 2 && topLevelDirs.includes(pathParts[0])) {
-                const topLevel = pathParts[0];
-                const packageName = pathParts[1];
-                const label = `@${topLevel}/${packageName}`;
-                
-                // Store the package directory path for this label
-                pathToPackageMap.set(packageDir, label);
-                console.log(`Mapped ${packageDir} -> ${label}`);
-              }
-            }
-
-            // Get all changed files in the PR
-            const files = await github.paginate(
-              github.rest.pulls.listFiles,
-              { owner, repo, pull_number: prNumber, per_page: 100 }
-            );
-
-            // Helper function to find which package a file belongs to
-            const findPackageForFile = (filePath) => {
-              const pathParts = filePath.split('/').filter(Boolean);
-              
-              // Traverse up directories to find matching package
-              for (let i = pathParts.length; i > 0; i--) {
-                const dirPath = pathParts.slice(0, i).join('/');
-                if (pathToPackageMap.has(dirPath)) {
-                  return pathToPackageMap.get(dirPath);
-                }
-              }
-              return null;
             };
 
-            // Extract package/app labels from file paths
-            const labelsToAdd = new Set();
-            for (const file of files) {
-              const pathParts = file.filename.split('/').filter(Boolean);
-              const [topLevel] = pathParts;
-              
-              // Check if file is in a tracked top-level directory
-              if (topLevelDirs.includes(topLevel)) {
-                // Find the package this file belongs to
-                const label = findPackageForFile(file.filename);
-                
-                if (label) {
-                  labelsToAdd.add(label);
-                } else {
-                  // In tracked directory but no package.json found - add zero label
-                  labelsToAdd.add('@zero');
+            // Build package directory map
+            const buildPackageMap = (packageJsonPaths) => {
+              const map = new Map();
+              for (const packageJsonPath of packageJsonPaths) {
+                const packageDir = path.dirname(packageJsonPath);
+                const [topLevel, packageName] = packageDir.split('/').filter(Boolean);
+                if (config.topLevelDirs.includes(topLevel) && packageName) {
+                  map.set(packageDir, `@${topLevel}/${packageName}`);
                 }
-              } else {
-                // Not in a tracked top-level directory (e.g., .github/scripts) - add zero label
-                labelsToAdd.add('@zero');
               }
-            }
+              return map;
+            };
 
-            if (labelsToAdd.size === 0) {
-              console.log('No matching package/app paths found.');
-              return;
-            }
+            // Pattern matching: determine label for a file path
+            const getLabelForFile = (filePath, packageMap) => {
+              const pathParts = filePath.split('/').filter(Boolean);
+              const fileName = pathParts[pathParts.length - 1];
+              const [topLevel, secondLevel, ...rest] = pathParts;
 
-            console.log(`Found ${labelsToAdd.size} package/app(s) to label: ${[...labelsToAdd].join(', ')}`);
+              // Pattern 1: Dockerfiles → @docker
+              if (fileName === 'Dockerfile' || fileName.startsWith('Dockerfile.')) {
+                return '@docker';
+              }
 
-            // Ensure labels exist (create if missing)
-            for (const labelName of labelsToAdd) {
+              // Pattern 2: Root config files → @config
+              if (pathParts.length === 1) {
+                return '@config';
+              }
+
+              // Pattern 3: File belongs to a tracked package/app
+              if (config.topLevelDirs.includes(topLevel)) {
+                for (let i = pathParts.length; i > 0; i--) {
+                  const dirPath = pathParts.slice(0, i).join('/');
+                  if (packageMap.has(dirPath)) {
+                    return packageMap.get(dirPath);
+                  }
+                }
+                // In tracked dir but no package.json found - use category name
+                return `@${topLevel}`;
+              }
+
+              // Pattern 4: Specific directory mappings
+              if (topLevel === '.github') {
+                if (secondLevel === 'scripts') return '@scripts';
+                if (secondLevel === 'workflows') return '@workflows';
+                return '@workflows'; // Default for other .github files
+              }
+
+              if (topLevel === 'marketing' && secondLevel === 'docs') {
+                return '@docs';
+              }
+
+              // Pattern 5: Other untracked directories - use directory name
+              if (topLevel?.startsWith('.')) {
+                return `@${topLevel.slice(1)}`;
+              }
+              return `@${topLevel}`;
+            };
+
+            // Ensure label exists
+            const ensureLabel = async (labelName) => {
               try {
                 await github.rest.issues.getLabel({ owner, repo, name: labelName });
               } catch (error) {
                 if (error.status === 404) {
-                  const category = labelName === '@zero' ? 'zero' : labelName.split('/')[0].substring(1);
-                  const color = colorMap[category] || '6b7280';
-                  const description = labelName === '@zero'
-                    ? 'Files not belonging to any tracked package/app'
-                    : `Auto-created label for ${labelName}`;
+                  const category = labelName.includes('/') 
+                    ? labelName.split('/')[0].substring(1)
+                    : labelName.substring(1);
+                  const color = config.colors[category] || '6b7280';
+                  const description = `Auto-created label for ${labelName}`;
                   await github.rest.issues.createLabel({
                     owner,
                     repo,
@@ -198,29 +177,48 @@ jobs:
                   throw error;
                 }
               }
+            };
+
+            // Main execution
+            const packageJsonPaths = findPackageJsonFiles();
+            console.log(`Found ${packageJsonPaths.length} package.json file(s)`);
+
+            const packageMap = buildPackageMap(packageJsonPaths);
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              { owner, repo, pull_number: prNumber, per_page: 100 }
+            );
+
+            // Collect labels using pattern matching
+            const labelsToAdd = new Set();
+            for (const file of files) {
+              const label = getLabelForFile(file.filename, packageMap);
+              labelsToAdd.add(label);
             }
 
-            // Get current labels on the PR
+            if (labelsToAdd.size === 0) {
+              console.log('No files to label.');
+              return;
+            }
+
+            console.log(`Labels to add: ${[...labelsToAdd].join(', ')}`);
+
+            // Ensure all labels exist
+            await Promise.all([...labelsToAdd].map(ensureLabel));
+
+            // Get current labels and determine what to remove
             const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
               owner,
               repo,
               issue_number: prNumber
             });
 
-            // Find stale package labels to remove
+            // Match all labels that start with @ and are not approval labels
+            const labelPattern = /^@(api|packages|marketing|web|docker|scripts|workflows|docs|config|[\w-]+)(\/.+)?$/;
+            const approvalPattern = /^\d+\/\d+$|^APPROVED$/;
             const toRemove = currentLabels
               .map(l => l.name)
-              .filter(name => {
-                if (!name.startsWith('@')) return false;
-                // Handle @zero label
-                if (name === '@zero') {
-                  return !labelsToAdd.has(name);
-                }
-                // Handle @category/name labels
-                if (!name.includes('/')) return false;
-                const category = name.split('/')[0].substring(1);
-                return (topLevelDirs.includes(category) || category === 'zero') && !labelsToAdd.has(name);
-              });
+              .filter(name => labelPattern.test(name) && !approvalPattern.test(name) && !labelsToAdd.has(name));
 
             // Remove stale labels
             for (const name of toRemove) {
@@ -238,15 +236,13 @@ jobs:
             }
 
             // Add new labels
-            if (labelsToAdd.size > 0) {
-              await github.rest.issues.addLabels({
-                owner,
-                repo,
-                issue_number: prNumber,
-                labels: [...labelsToAdd]
-              });
-              console.log(`Added labels: ${[...labelsToAdd].join(', ')}`);
-            }
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: prNumber,
+              labels: [...labelsToAdd]
+            });
+            console.log(`Added labels: ${[...labelsToAdd].join(', ')}`);
 
       - name: Get approval count
         id: approvals
@@ -255,21 +251,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
-            const TARGET_BRANCH = process.env.TARGET_BRANCH;
             const pr = context.payload.pull_request;
-
-            if (pr.base.ref !== TARGET_BRANCH) {
-              console.log(`Skipping: PR targets ${pr.base.ref}, not ${TARGET_BRANCH}`);
-              return '0';
-            }
-
             const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number
             });
 
-            // Get each user's most recent review
             const latestReviewByUser = {};
             reviews
               .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at))
@@ -279,7 +267,6 @@ jobs:
                 }
               });
 
-            // Count approvals (only users whose latest review is APPROVED)
             const approvers = Object.values(latestReviewByUser)
               .filter(review => review.state === 'APPROVED')
               .map(review => review.user.login);
@@ -293,21 +280,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const TARGET_BRANCH = process.env.TARGET_BRANCH;
             const pr = context.payload.pull_request;
-
-            if (pr.base.ref !== TARGET_BRANCH) {
-              console.log(`Skipping: PR targets ${pr.base.ref}, not ${TARGET_BRANCH}`);
-              return;
-            }
-
             const { owner, repo } = context.repo;
             const count = parseInt(`${{ steps.approvals.outputs.result }}`, 10) || 0;
             const required = parseInt(process.env.APPROVAL_THRESHOLD, 10);
 
-            // Determine label name and color
             const labelName = count >= required ? 'APPROVED' : `${count}/${required}`;
-            const color = count >= required ? '0e8a16' : 'd73a4a'; // green : red
+            const color = count >= required ? '0e8a16' : 'd73a4a';
 
             // Get existing labels
             const { data: existingLabels } = await github.rest.issues.listLabelsOnIssue({
@@ -317,9 +296,9 @@ jobs:
             });
 
             // Remove old approval labels
-            const approvalLabelPattern = /^\d+\/\d+$|^APPROVED$/;
+            const approvalPattern = /^\d+\/\d+$|^APPROVED$/;
             for (const label of existingLabels) {
-              if (approvalLabelPattern.test(label.name) && label.name !== labelName) {
+              if (approvalPattern.test(label.name) && label.name !== labelName) {
                 try {
                   await github.rest.issues.removeLabel({
                     owner,
@@ -334,7 +313,7 @@ jobs:
               }
             }
 
-            // Ensure the label exists
+            // Ensure label exists
             try {
               await github.rest.issues.getLabel({ owner, repo, name: labelName });
             } catch (error) {
