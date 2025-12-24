@@ -1,5 +1,4 @@
 import { spawnSync } from "child_process"
-import inquirer from "inquirer"
 import chalk from "chalk"
 import { genAlphanumericPassword, genRandomIdentifier } from "../utils/db-utils.js"
 

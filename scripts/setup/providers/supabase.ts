@@ -153,7 +153,7 @@ export const setupSupabase = async (): Promise<string> => {
     {
       type: "input",
       name: "projectName",
-      message: chalk.cyan("Enter a name for your Neon project:"),
+      message: chalk.cyan("Enter a name for your Supabase project:"),
       default: "ZeroStarter-oss-db",
       validate: (input: string) => {
         if (!input || input.trim().length === 0) {
@@ -162,7 +162,7 @@ export const setupSupabase = async (): Promise<string> => {
         if (input.length > 64) {
           return "Project name must be 64 characters or less"
         }
-        // Neon project names should be lowercase alphanumeric with hyphens
+        // Supabase project names should be lowercase alphanumeric with hyphens
         if (!/^[a-z0-9-]+$/.test(input)) {
           return "Project name must contain only lowercase letters, numbers, and hyphens"
         }

@@ -3,7 +3,6 @@ import chalk from "chalk"
 import { select } from "@inquirer/prompts"
 import { setupSupabase } from "./providers/supabase.js"
 import { setupNeon } from "./providers/neon.js"
-// import { setupRailway } from "./providers/railway.js"
 import { setupLocalDocker } from "./providers/local-docker.js"
 import { setupRailway } from "./providers/railway-pg.js"
 

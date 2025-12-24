@@ -39,9 +39,11 @@ const updateDatabaseUrlInEnv = (databaseUrl: string) => {
     let envContent = readFileSync(".env", "utf-8")
 
     // Check if POSTGRES_URL already exists
-    if (envContent.includes("POSTGRES_URL=")) {
+    if (/^POSTGRES_URL=/m.test(envContent)) {
       // Replace existing POSTGRES_URL
-      envContent = envContent.replace(/POSTGRES_URL=.*/, `POSTGRES_URL=${databaseUrl}`)
+      // Escape $ in replacement string to prevent regex replacement issues
+      const escapedUrl = databaseUrl.replace(/\$/g, "$$$$")
+      envContent = envContent.replace(/^POSTGRES_URL=.*/m, `POSTGRES_URL=${escapedUrl}`)
       console.log(chalk.greenBright("✅ Updated POSTGRES_URL in .env"))
     } else {
       // Append POSTGRES_URL if it doesn't exist

@@ -65,7 +65,11 @@ export const setupRailway = async (): Promise<string> => {
   if (!confirm) return ""
 
   console.log(chalk.blueBright("\nInitializing Railway project..."))
-  railway(["init"], true)
+  const initResult = railway(["init"], true)
+  if (initResult.status !== 0) {
+    console.log(chalk.red("\n❌ Failed to initialize Railway project."))
+    process.exit(1)
+  }
 
   console.log(chalk.blueBright("\nAdding PostgreSQL database..."))
   const addResult = railway(["add", "--database", "postgres"], true)
@@ -76,7 +80,11 @@ export const setupRailway = async (): Promise<string> => {
   }
 
   console.log(chalk.blueBright("\nLinking project..."))
-  railway(["link"], true)
+  const linkResult = railway(["link"], true)
+  if (linkResult.status !== 0) {
+    console.log(chalk.red("\n❌ Failed to link Railway project."))
+    process.exit(1)
+  }
 
   console.log(chalk.blueBright("\nFetching DATABASE_URL..."))
 
