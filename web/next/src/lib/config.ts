@@ -64,6 +64,10 @@ export const config = {
             title: "Scripts",
             url: "/docs/getting-started/scripts",
           },
+          {
+            title: "Roadmap",
+            url: "/docs/getting-started/roadmap",
+          },
         ],
       },
       {

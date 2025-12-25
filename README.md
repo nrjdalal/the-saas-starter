@@ -65,7 +65,7 @@ This project is a monorepo organized as follows:
 
 We're actively working on integrations for AI, analytics, background tasks, email, payments, and more.
 
-📖 **[View planned features →](https://zerostarter.dev/docs/getting-started/architecture#future-stack-and-features)**
+📖 **[View detailed roadmap →](https://zerostarter.dev/docs/getting-started/roadmap)**
 
 ## 🔥 Why ZeroStarter?
 
@@ -102,7 +102,7 @@ const res = await apiClient.health.$get()
 const data = await res.json()
 ```
 
-📖 **[View full type-safe API client documentation →](https://zerostarter.dev/docs/getting-started/type-safe-api)**
+📖 **[Type-Safe API documentation] →](https://zerostarter.dev/docs/getting-started/type-safe-api)**
 
 ## 🚀 Quick Start
 
