@@ -9,7 +9,7 @@ A modern, type-safe, and high-performance SaaS starter template built with a mon
 > [!IMPORTANT]
 > ZeroStarter is currently in **Release Candidate (RC)** status. All implemented features are stable and production-ready. We're actively adding new features and integrations day-by-day.
 
-## Architecture and Tech Stack
+## ⚙️ Architecture and Tech Stack
 
 > [!NOTE]
 > For detailed information about the architecture and tech stack, see the [Architecture documentation](https://zerostarter.dev/docs/getting-started/architecture).
