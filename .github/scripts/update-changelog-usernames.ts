@@ -72,7 +72,7 @@ async function processChangelog() {
     if (username) {
       updatedContent = updatedContent.replaceAll(
         `<${email}>`,
-        `([@${username}](https://github.com/${username}))`,
+        `@${username}`,
       )
     } else {
       updatedContent = updatedContent
