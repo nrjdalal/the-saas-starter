@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools/production"
 import { CodeXml, ExternalLink } from "lucide-react"
 
 const config = {
