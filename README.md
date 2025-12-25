@@ -63,7 +63,7 @@ This project is a monorepo organized as follows:
 
 ## 🔥 Why ZeroStarter?
 
-**Architecture & Best Practices as a Service** — ZeroStarter isn't just a starter template; it's a complete blueprint for building production-ready SaaS applications with battle-tested patterns and practices.
+**Architecture & Best Practices as a Service** — ZeroStarter isn't just a starter template, it's a complete blueprint for building production-ready SaaS applications with battle-tested patterns and practices.
 
 - **Modular Architecture** — Clean, plug-and-play packages that work independently or together. Swap components, extend functionality, or customize without breaking the system
 - **End-to-End Type Safety** — Hono RPC ensures type safety from database to frontend. Catch errors at compile time, ship with confidence
@@ -131,7 +131,8 @@ bun dev
 
 ## 🗺️ Roadmap
 
-We're actively working on integrations for AI, analytics, background tasks, email, payments, and more.  
+We're actively working on integrations for AI, analytics, background tasks, email, payments, and more.
+
 **[View planned features →](https://zerostarter.dev/docs)**
 
 ## 🤝 Contributing
