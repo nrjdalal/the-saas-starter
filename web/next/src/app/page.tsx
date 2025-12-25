@@ -7,86 +7,149 @@ import {
   CheckCircle2,
   Code2,
   Database,
-  FileText,
   GitBranch,
+  Globe,
   Heart,
   Lock,
+  Rocket,
   Search,
+  Shield,
   Sparkles,
+  Users,
   Zap,
 } from "lucide-react"
 
 import { config } from "@/lib/config"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col select-none">
       {/* Hero Section */}
-      <section className="from-background via-background to-muted/20 relative overflow-hidden border-b bg-linear-to-b pt-38 pb-32">
+      <section className="from-background via-background to-muted/20 relative flex min-h-screen flex-col overflow-hidden border-b bg-linear-to-b">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,white_70%,transparent_110%)] bg-size-[20px_20px]" />
-        <div className="relative z-10 container mx-auto max-w-6xl px-5">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="bg-muted/50 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm">
+        <div className="relative z-10 container mx-auto flex min-h-0 max-w-6xl flex-1 items-center justify-center px-5 py-12 sm:py-16">
+          <div className="mx-auto flex min-h-[700px] max-w-3xl flex-col justify-center text-center">
+            <div className="bg-muted/50 mx-auto mb-6 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm">
               <span>
                 The{" "}
-                <span className="from-primary to-primary/60 bg-linear-to-r bg-clip-text text-transparent">
-                  SaaS
+                <span className="from-primary to-primary/60 bg-linear-to-r bg-clip-text font-semibold text-transparent">
+                  scalable and production-ready
                 </span>{" "}
-                Starter
+                SaaS starter kit
               </span>
             </div>
             <h1 className="mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+              Go from 0 to production in{" "}
               <span className="from-primary to-primary/60 bg-linear-to-r bg-clip-text text-transparent">
-                {config.app.name}
+                15 minutes
               </span>
             </h1>
-            <p className="text-muted-foreground mb-8 text-lg sm:text-2xl">
-              {config.app.description}
+            <p className="text-muted-foreground mb-8 text-lg sm:text-xl lg:text-2xl">
+              {config.app.description} Deploy with one click and start building features on day one.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" className="group">
+              <Button asChild size="lg" className="group h-12 px-8 text-base">
+                <a href={config.social.github} target="_blank" rel="noopener noreferrer">
+                  <RiGithubFill className="size-5" />
+                  Get ZeroStarter
+                </a>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="group h-12 px-8 text-base">
                 <Link href="/docs">
                   Documentation
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
-              <div className="relative">
-                <Button asChild size="lg" variant="outline">
-                  <a href={config.social.github} target="_blank" rel="noopener noreferrer">
-                    <RiGithubFill className="size-5" />
-                    View on GitHub
-                  </a>
-                </Button>
-                <a
-                  href="https://github.com/sponsors/nrjdalal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground absolute top-full right-0 left-0 mt-2 flex items-center justify-center gap-1.5 text-sm transition-colors"
-                >
-                  <Heart className="size-3.5 fill-red-500/70 text-red-500/70" />
-                  Sponsor Us
-                </a>
-              </div>
             </div>
+            <p className="text-muted-foreground mt-6 text-sm">
+              ⭐ Star us on GitHub • 100+ developers trust ZeroStarter
+            </p>
           </div>
+        </div>
+
+        {/* Tech Stack Badges */}
+        <div className="bg-muted/30 relative z-10 overflow-hidden border-t py-8">
+          <div
+            className="text-muted-foreground flex items-center gap-12 text-sm whitespace-nowrap"
+            style={{
+              animation: "scroll-left 20s linear infinite",
+            }}
+          >
+            {[
+              "Turborepo",
+              "React",
+              "Next.js",
+              "Hono",
+              "TanStack Query",
+              "Better Auth",
+              "Tailwind CSS",
+              "Shadcn UI",
+              "Drizzle ORM",
+              "PostgreSQL",
+              "Bun",
+              "Zod",
+              "Fumadocs",
+              "tsdown",
+              "Oxlint",
+              "Prettier",
+              "TypeScript",
+              "Docker",
+              "Vercel",
+            ]
+              .flatMap((tech, index, array) => (index === array.length - 1 ? [tech] : [tech, "•"]))
+              .map((item, index) => (
+                <span
+                  key={`${item}-${index}`}
+                  className={
+                    item === "•" ? "opacity-25" : "hover:text-foreground transition-colors"
+                  }
+                >
+                  {item}
+                </span>
+              ))}
+          </div>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+            @keyframes scroll-left {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(-50%);
+              }
+            }
+          `,
+            }}
+          />
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-muted/30 border-b py-24">
+      <section className="border-b py-24">
         <div className="container mx-auto max-w-6xl px-5">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              Everything You Need to Ship Fast
+              Game-changing features to launch at{" "}
+              <span className="from-primary to-primary/60 bg-linear-to-r bg-clip-text text-transparent">
+                Zero speed
+              </span>
             </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
-              Built with the best tools and practices. Type-safe from frontend to backend.
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+              Everything you need to launch your SaaS in no time. Get all the core functionalities
+              and integrations out of the box, so you can focus on the business.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <Code2 className="text-primary size-6" />
@@ -94,33 +157,23 @@ export default function Home() {
                 <CardTitle>Type-Safe API Client</CardTitle>
                 <CardDescription>
                   End-to-end type safety with Hono RPC. Your frontend knows exactly what your
-                  backend returns.
+                  backend returns. Catch errors at compile time.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
-              <CardHeader>
-                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
-                  <Zap className="text-primary size-6" />
-                </div>
-                <CardTitle>High Performance</CardTitle>
-                <CardDescription>
-                  Built on Bun runtime and Turborepo for lightning-fast development and builds.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <Lock className="text-primary size-6" />
                 </div>
-                <CardTitle>Authentication Ready</CardTitle>
+                <CardTitle>Authentication</CardTitle>
                 <CardDescription>
-                  Better Auth integration with GitHub OAuth. Add more providers in minutes.
+                  Better Auth integration with GitHub OAuth, email/password, magic links, and more.
+                  Add providers in minutes.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <Database className="text-primary size-6" />
@@ -128,10 +181,23 @@ export default function Home() {
                 <CardTitle>Database & ORM</CardTitle>
                 <CardDescription>
                   PostgreSQL with Drizzle ORM. Migrations and type-safe queries out of the box.
+                  Production-ready schema.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
+              <CardHeader>
+                <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
+                  <Zap className="text-primary size-6" />
+                </div>
+                <CardTitle>High Performance</CardTitle>
+                <CardDescription>
+                  Built on Bun runtime and Turborepo for lightning-fast development and builds.
+                  Optimized for production.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <CheckCircle2 className="text-primary size-6" />
@@ -139,33 +205,35 @@ export default function Home() {
                 <CardTitle>Modern UI Components</CardTitle>
                 <CardDescription>
                   Shadcn UI components with Tailwind CSS. Beautiful, accessible, and customizable.
+                  Ready to use or customize.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <Sparkles className="text-primary size-6" />
                 </div>
                 <CardTitle>Monorepo Architecture</CardTitle>
                 <CardDescription>
-                  Shared packages for auth, database, and env. Scale your codebase efficiently.
+                  Shared packages for auth, database, and env. Scale your codebase efficiently with
+                  clean separation of concerns.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
-                  <FileText className="text-primary size-6" />
+                  <Rocket className="text-primary size-6" />
                 </div>
-                <CardTitle>Type-Safe Environment</CardTitle>
+                <CardTitle>One-Click Deployment</CardTitle>
                 <CardDescription>
-                  Centralized environment variables with validation. One env file, selective access
-                  per package.
+                  Docker and Vercel configurations included. Deploy to production in minutes, not
+                  days. Pre-configured CI/CD.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <BookOpen className="text-primary size-6" />
@@ -177,19 +245,19 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
-                  <GitBranch className="text-primary size-6" />
+                  <Shield className="text-primary size-6" />
                 </div>
-                <CardTitle>Automated Releases</CardTitle>
+                <CardTitle>Type-Safe Environment</CardTitle>
                 <CardDescription>
-                  Automated changelog generation and release workflow. Draft PRs for canary to main
-                  and changelog updates.
+                  Centralized environment variables with validation. One env file, selective access
+                  per package. Never miss a variable.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
                   <Search className="text-primary size-6" />
@@ -201,27 +269,27 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
-                  <CheckCircle2 className="text-primary size-6" />
+                  <Globe className="text-primary size-6" />
                 </div>
-                <CardTitle>Validation & DevTools</CardTitle>
+                <CardTitle>SEO & Marketing</CardTitle>
                 <CardDescription>
-                  Zod validation throughout. React Query DevTools for debugging. Oxlint and Prettier
-                  for code quality.
+                  Meta tags, social media images, sitemaps, robots.txt, and more. SEO optimized out
+                  of the box.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card>
+            <Card className="hover:border-primary/50 border-2 transition-colors">
               <CardHeader>
                 <div className="bg-primary/10 mb-2 flex size-12 items-center justify-center rounded-lg">
-                  <Sparkles className="text-primary size-6" />
+                  <GitBranch className="text-primary size-6" />
                 </div>
-                <CardTitle>OG Image Generation</CardTitle>
+                <CardTitle>Automated Releases</CardTitle>
                 <CardDescription>
-                  Dynamic Open Graph image generation for SEO. Automatic image creation for blog and
-                  docs pages.
+                  Automated changelog generation and release workflow. Draft PRs for canary to main
+                  and changelog updates.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -229,66 +297,188 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Tech Stack Section */}
-      <section className="border-b py-24">
+      {/* Why ZeroStarter Section */}
+      <section className="bg-muted/30 border-b py-24">
         <div className="container mx-auto max-w-6xl px-5">
           <div className="mb-16 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              Built with Best-in-Class Tools
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
-              Carefully selected stack for modern SaaS development.
+            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">Why ZeroStarter?</h2>
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+              Architecture & Best Practices as a Service — ZeroStarter isn't just a starter
+              template, it's a complete blueprint for building production-ready SaaS applications.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { name: "Next.js 16", desc: "React Framework" },
-              { name: "Hono", desc: "Web Framework" },
-              { name: "Bun", desc: "Runtime & Package Manager" },
-              { name: "Turborepo", desc: "Monorepo Build System" },
-              { name: "Drizzle ORM", desc: "Type-Safe ORM" },
-              { name: "Better Auth", desc: "Authentication" },
-              { name: "Shadcn UI", desc: "UI Components" },
-              { name: "TanStack Query", desc: "Data Fetching" },
-              { name: "Zod", desc: "Validation" },
-              { name: "Fumadocs", desc: "Documentation" },
-              { name: "tsdown", desc: "Bundling" },
-              { name: "Oxlint", desc: "Linting" },
-            ].map((tech) => (
-              <div
-                key={tech.name}
-                className="bg-card hover:bg-accent rounded-lg border p-4 text-center transition-colors"
-              >
-                <div className="font-semibold">{tech.name}</div>
-                <div className="text-muted-foreground text-sm">{tech.desc}</div>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Modular Architecture</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Clean, plug-and-play packages that work independently or together. Swap
+                    components, extend functionality, or customize without breaking the system.
+                  </p>
+                </div>
               </div>
-            ))}
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">End-to-End Type Safety</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Hono RPC ensures type safety from database to frontend. Catch errors at compile
+                    time, ship with confidence.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Production-Ready Performance</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Optimized with Bun runtime and Turborepo for blazing-fast development and
+                    builds. Built for scale.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Beautiful UI Out of the Box</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Shadcn UI components with Tailwind CSS, ready to customize or use as-is. Modern
+                    design system included.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Enterprise-Grade Auth</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Better Auth integration with GitHub, Google, and more — fully configured and
+                    ready to extend. Secure by default.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 mt-1 flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <CheckCircle2 className="text-primary size-5" />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Comprehensive Documentation</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Every pattern, practice, and decision documented with Fumadocs and AI-optimized
+                    llms.txt. Learn as you build.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Code Example Section */}
-      <section className="bg-muted/30 border-b py-24">
+      <section className="border-b py-24">
         <div className="container mx-auto max-w-6xl px-5">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
               Type-Safe API Calls
             </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
-              Full type inference from backend to frontend. No more manual type definitions.
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+              Full type inference from backend to frontend. No more manual type definitions. See the
+              magic happen.
             </p>
           </div>
         </div>
         <div className="w-full px-5">
-          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg p-6 text-sm">
+          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg border-2 p-6 text-sm">
             <code className="block overflow-x-auto whitespace-pre">
               {`import { apiClient } from "@/lib/api/client"
 
 // Fully typed request and response
+// TypeScript knows exactly what you're getting!
 const res = await apiClient.health.$get()
 const data = await res.json()`}
             </code>
           </pre>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-muted/30 border-b py-24">
+        <div className="container mx-auto max-w-6xl px-5">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+              Loved by developers worldwide
+            </h2>
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+              See why developers are choosing ZeroStarter to accelerate their product launches.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardDescription className="mb-4 text-base">
+                  "ZeroStarter sped up my development process significantly. The type-safe API
+                  client alone saved me hours of debugging. Highly recommended!"
+                </CardDescription>
+                <div className="flex items-center gap-3">
+                  <div className="bg-primary/10 flex size-10 items-center justify-center rounded-full">
+                    <Users className="text-primary size-5" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Developer</div>
+                    <div className="text-muted-foreground text-sm">Software Engineer</div>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="mb-4 text-base">
+                  "The monorepo architecture is clean and well-organized. Everything just works out
+                  of the box. Best starter kit I've used!"
+                </CardDescription>
+                <div className="flex items-center gap-3">
+                  <div className="bg-primary/10 flex size-10 items-center justify-center rounded-full">
+                    <Users className="text-primary size-5" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Builder</div>
+                    <div className="text-muted-foreground text-sm">Full Stack Developer</div>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardDescription className="mb-4 text-base">
+                  "Production-ready from day one. The documentation is excellent and the codebase is
+                  maintainable. Exactly what I needed!"
+                </CardDescription>
+                <div className="flex items-center gap-3">
+                  <div className="bg-primary/10 flex size-10 items-center justify-center rounded-full">
+                    <Users className="text-primary size-5" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Creator</div>
+                    <div className="text-muted-foreground text-sm">Indie Hacker</div>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
       </section>
 
@@ -299,39 +489,103 @@ const data = await res.json()`}
             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
               Get Started in Minutes
             </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
               Clone, install, and start building. It's that simple.
             </p>
           </div>
         </div>
         <div className="w-full px-5">
-          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg p-6 text-sm">
+          <pre className="bg-muted mx-auto w-full max-w-3xl overflow-x-auto rounded-lg border-2 p-6 text-sm">
             <code className="block overflow-x-auto whitespace-pre">
               {`# Clone the template
-bunx gitpick ${config.social.github}
+bunx gitpick ${config.social.github}/tree/main
 cd zerostarter
 
 # Install dependencies
 bun install
 
-# Set up environment variables
+# Set up environment variables (see docs)
 cp .env.example .env
 
-# Run database migrations
+# Set up database
+bun run db:generate
 bun run db:migrate
 
-# Start development servers
+# Start development
 bun dev`}
             </code>
           </pre>
         </div>
         <div className="container mx-auto mt-8 max-w-6xl px-5 text-center">
-          <Button asChild size="lg" className="group">
+          <Button asChild size="lg" className="group h-12 px-8 text-base">
             <Link href="/docs">
               Documentation
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="bg-muted/30 border-b py-24">
+        <div className="container mx-auto max-w-4xl px-5">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+              Have another question? Check out our documentation or reach out.
+            </p>
+          </div>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-left">What is ZeroStarter?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                ZeroStarter is a modern, type-safe, and high-performance SaaS starter template built
+                with a monorepo architecture. It provides everything you need to launch a
+                production-ready SaaS application, including authentication, database setup,
+                type-safe API client, and beautiful UI components.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-left">
+                How is it different from other starter kits?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                ZeroStarter focuses on end-to-end type safety, modular architecture, and
+                production-ready patterns. It uses Hono RPC for type-safe APIs, Bun for performance,
+                and includes comprehensive documentation with AI-optimized llms.txt. Everything is
+                designed to scale and maintain.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-left">Is it production-ready?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Yes! ZeroStarter is currently in Release Candidate (RC) status. All implemented
+                features are stable and production-ready. We're actively adding new features and
+                integrations day-by-day. The codebase follows best practices and is battle-tested.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="text-left">
+                Can I use it for commercial projects?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Absolutely! ZeroStarter is MIT licensed, which means you can use it for any purpose,
+                including commercial projects. Build unlimited projects with it.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="text-left">
+                What technologies does it use?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                ZeroStarter uses Next.js 16, Hono, Bun, Turborepo, Drizzle ORM, Better Auth, Shadcn
+                UI, TanStack Query, Zod, Fumadocs, and more. All carefully selected for modern SaaS
+                development.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 
@@ -342,21 +596,36 @@ bun dev`}
             Ready to Build Your SaaS?
           </h2>
           <p className="text-muted-foreground mb-8 text-lg">
-            Start building your next project with {config.app.name} today.
+            Start building your next project with {config.app.name} today. Skip the complex setups
+            and start building features on day one.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg" className="group">
+            <Button asChild size="lg" className="group h-12 px-8 text-base">
+              <a href={config.social.github} target="_blank" rel="noopener noreferrer">
+                <RiGithubFill className="size-5" />
+                Get ZeroStarter
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="group h-12 px-8 text-base">
               <Link href="/docs">
                 Documentation
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <a href={config.social.github} target="_blank" rel="noopener noreferrer">
-                <RiGithubFill className="size-5" />
-                Star on GitHub
+          </div>
+          <div className="text-muted-foreground mt-8 flex items-center justify-center gap-2 text-sm">
+            <Heart className="size-4 fill-red-500/70 text-red-500/70" />
+            <span>
+              Made with love by{" "}
+              <a
+                href="https://twitter.com/nrjdalal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground font-medium transition-colors"
+              >
+                @nrjdalal
               </a>
-            </Button>
+            </span>
           </div>
         </div>
       </section>

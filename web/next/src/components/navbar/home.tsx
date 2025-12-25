@@ -69,7 +69,7 @@ export function Navbar() {
   if (pathname?.startsWith("/x")) return null
 
   const navLinks = [
-    { href: "/docs", label: "Docs" },
+    { href: "/docs", label: "Documentation" },
     { href: "/blog", label: "Blog" },
   ]
 
@@ -173,6 +173,12 @@ export function Navbar() {
                     </Link>
                   )
                 })}
+                <Button asChild size="sm" className="mt-2 w-fit" onClick={() => setIsOpen(false)}>
+                  <a href={config.social.github} target="_blank" rel="noopener noreferrer">
+                    <RiGithubFill className="size-4" />
+                    Get ZeroStarter
+                  </a>
+                </Button>
               </nav>
               {/* Mobile Social Links */}
               <div className="mt-2.5 ml-4 flex items-center gap-2.5">
