@@ -1,3 +1,37 @@
+## v0.0.10
+
+[compare changes](https://github.com/nrjdalal/zerostarter/compare/f08fb3abfde869d3929a3c169c7c14fc8ddb8e52...v0.0.10)
+
+### 🚀 Enhancements
+
+- Syntax highlighting to landing page ([1136a4f](https://github.com/nrjdalal/zerostarter/commit/1136a4f))
+- Api status on home ([a099447](https://github.com/nrjdalal/zerostarter/commit/a099447))
+
+### 💅 Refactors
+
+- Fe files and structure ([c3d941d](https://github.com/nrjdalal/zerostarter/commit/c3d941d))
+
+### 🏡 Chore
+
+- Switch from userjot widget to url ([1e78521](https://github.com/nrjdalal/zerostarter/commit/1e78521))
+- Add docs and userjot links ([b3e544a](https://github.com/nrjdalal/zerostarter/commit/b3e544a))
+- @ at imports ([4dafd52](https://github.com/nrjdalal/zerostarter/commit/4dafd52))
+- Sync ([e9bf13b](https://github.com/nrjdalal/zerostarter/commit/e9bf13b))
+- Update deps ([ddaae59](https://github.com/nrjdalal/zerostarter/commit/ddaae59))
+- Added ai review to have a look later ([6f16240](https://github.com/nrjdalal/zerostarter/commit/6f16240))
+- Split roadmap ([c6da1ed](https://github.com/nrjdalal/zerostarter/commit/c6da1ed))
+- Correct readme ([81d2b4f](https://github.com/nrjdalal/zerostarter/commit/81d2b4f))
+- Use aliases at imports ([4327c1d](https://github.com/nrjdalal/zerostarter/commit/4327c1d))
+- Init posthog ([3477b19](https://github.com/nrjdalal/zerostarter/commit/3477b19))
+- Add env to .env.example ([1119d51](https://github.com/nrjdalal/zerostarter/commit/1119d51))
+- Minor grouping ([5f3ef6d](https://github.com/nrjdalal/zerostarter/commit/5f3ef6d))
+- All envs using env pkg ([1a54b2c](https://github.com/nrjdalal/zerostarter/commit/1a54b2c))
+- Set next node env using node env ([cb1eacf](https://github.com/nrjdalal/zerostarter/commit/cb1eacf))
+
+### ❤️ Contributors
+
+- Neeraj Dalal @nrjdalal
+
 ## v0.0.9
 
 [compare changes](https://github.com/nrjdalal/zerostarter/compare/df7eacb268c5f500a23ab34cb367a612d52d51be...v0.0.9)
