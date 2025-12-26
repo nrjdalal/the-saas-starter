@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ApiStatus } from "@/components/api-status"
 
 export default async function Home() {
   const typescriptCode = `import { apiClient } from "@/lib/api/client"
@@ -115,6 +116,9 @@ bun dev`
             <p className="text-muted-foreground mt-6 text-sm">
               ⭐ Star us on GitHub • 100+ developers trust ZeroStarter
             </p>
+            <div className="mt-4 flex justify-center">
+              <ApiStatus />
+            </div>
           </div>
         </div>
 
