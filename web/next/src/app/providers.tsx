@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { isProduction } from "@packages/env"
+import { env } from "@packages/env/web-next"
 import { PostHogProvider } from "@posthog/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
@@ -18,7 +19,7 @@ export function OuterProvider({ children }: { children: React.ReactNode }) {
     <PostHogProvider client={posthog}>
       <QueryClientProvider client={queryClient}>
         {children}
-        {!isProduction(process.env.NODE_ENV) && <DevTools />}
+        {!isProduction(env.NEXT_PUBLIC_NODE_ENV) && <DevTools />}
       </QueryClientProvider>
     </PostHogProvider>
   )
