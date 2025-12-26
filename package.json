@@ -29,6 +29,7 @@
     "devtools": "turbo devtools",
     "format": "prettier --write --ignore-unknown *",
     "postinstall": "bun .github/scripts/deps-manager.ts",
+    "knip": "SKIP_ENV_VALIDATION=true knip",
     "lint": "turbo lint --summarize",
     "prepare": "bunx simple-git-hooks",
     "start": "turbo start"
@@ -64,6 +65,7 @@
     "@types/bun": "catalog:",
     "@types/node": "catalog:",
     "globby": "catalog:",
+    "knip": "catalog:",
     "lint-staged": "catalog:",
     "oxlint": "catalog:",
     "prettier": "catalog:",
@@ -110,6 +112,7 @@
     "globby": "^16.1.0",
     "hono": "^4.11.2",
     "input-otp": "^1.4.2",
+    "knip": "^5.77.1",
     "lint-staged": "^16.2.7",
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",
