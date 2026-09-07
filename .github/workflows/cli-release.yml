@@ -6,6 +6,8 @@ on:
       - canary
     paths:
       - "packages/cli/**"
+      # the scripts package holds the release-version script this workflow runs; a change in it re-runs the gate
+      - "packages/scripts/**"
       # the matrix gates the publish on the whole suite (bun run test), so a change to any test
       # has to reach it; filtered to the CLI's own tests, a fix elsewhere never re-ran the gate
       - "tests/**"
@@ -115,7 +117,7 @@ jobs:
             TAG="latest"
           else
             TAG="canary"
-            # preview the next release with the same decision auto-release ships: the larger of the tree and what the window earned. the script runs the scripts package's locked changelogen, so the install (no lifecycle scripts, the npm token is in scope) comes first here; the shared install below is then a no-op
+            # preview the next release with the same decision auto-release ships: the larger of the tree and what the window earned. the script imports the scripts package's locked changelogen, so the install (no lifecycle scripts, the npm token is in scope) comes first here; the shared install below is then a no-op
             (cd ../.. && bun install --frozen-lockfile --ignore-scripts)
             DECISION=$(cd ../.. && bun packages/scripts/src/release-version.ts)
             NEXT_VERSION=$(echo "$DECISION" | jq -r .next)
