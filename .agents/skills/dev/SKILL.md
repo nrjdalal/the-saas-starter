@@ -37,7 +37,7 @@ The API dev task runs `bun --hot src/index.ts`, and **`--hot` does not pick up n
 # A linked worktree lives under the primary checkout, so its stack is skipped by path.
 ROOT=$(git rev-parse --show-toplevel)
 # The shared proxy is itself a portless process, and it lives wherever the first stack to start ran, so it is spared by port, not by path
-PROXY=$(lsof -nP -iTCP:1355 -sTCP:LISTEN -t 2>/dev/null | tr '\n' ' ')
+PROXY=$(lsof -nP -iTCP:"${PORTLESS_PORT:-1355}" -sTCP:LISTEN -t 2>/dev/null | tr '\n' ' ')
 for p in $(pgrep -f "turbo run dev|bun run dev|dev:app|next dev|next-server|src/index.ts|tsdown|portless"); do
   case " $PROXY " in *" $p "*) continue ;; esac
   cwd=$(lsof -a -p "$p" -d cwd -Fn 2>/dev/null | grep ^n | cut -c2-)
@@ -52,7 +52,7 @@ API=$(bunx portless get api.zerostarter)
 curl -sf --retry 60 --retry-delay 1 --retry-connrefused "$API/api/health" > /dev/null
 ```
 
-Killing turbo alone is not enough: `pkill -f "turbo run dev"` matches the turbo processes and none of the children they spawned, and the survivors include both `next-server`, which keeps its port so the next `bun run dev` dies with "Another next dev server is already running", and the `.bin/portless` supervisors that hold the route registration. It is also worktree-blind, so it would take down another worktree's stack. Hence the wide pattern, narrowed by each process's own working directory. The shared proxy needs the extra guard because it matches that pattern too and its own directory says nothing about who depends on it: whichever stack started first hosts it, and killing it drops routing for every worktree on the machine. The shared portless proxy keeps running either way, and this worktree's apps re-register on restart; `bunx portless list` showing no route for this branch confirms the old stack is gone. Done when the previously-NOT_FOUND route responds.
+Killing turbo alone is not enough: `pkill -f "turbo run dev"` matches the turbo processes and none of the children they spawned, and the survivors include both `next-server`, which keeps its port so the next `bun run dev` dies with "Another next dev server is already running", and the `.bin/portless` supervisors that hold the route registration. It is also worktree-blind, so it would take down another worktree's stack. Hence the wide pattern, narrowed by each process's own working directory. The shared proxy needs the extra guard because it matches that pattern too and its own directory says nothing about who depends on it: whichever stack started first hosts it, and killing it drops routing for every worktree on the machine. It is found by the port it listens on, `PORTLESS_PORT` or 1355, so a fork that moves the port keeps the protection. The shared portless proxy keeps running either way, and this worktree's apps re-register on restart; `bunx portless list` showing no route for this branch confirms the old stack is gone. Done when the previously-NOT_FOUND route responds.
 
 Restart the same way after changing `@packages/*` exports the API consumes: they resolve to built dist, so run `bunx turbo run build --filter=@packages/<name>` first.
 
