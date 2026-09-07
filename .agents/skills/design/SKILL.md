@@ -36,7 +36,7 @@ When a change establishes or alters a convention, update this file in the same c
 
 ## Color and theming
 
-- Semantic tokens only: `text-muted-foreground`, `bg-card`, `border-border`, `bg-sidebar`, and friends. No hardcoded hex, rgb, or hsl in classNames or inline styles. The one exception is Satori-rendered OG images, which have no theme context.
+- Semantic tokens only: `text-muted-foreground`, `bg-card`, `border-border`, `bg-sidebar`, and friends. No hardcoded hex, rgb, or hsl in classNames or inline styles. The one exception is takumi-rendered OG images, which have no theme context.
 - Dark mode is `next-themes` (`attribute="class"`, `app/providers.tsx`); pair every `dark:` with a token.
 - Success uses the `--success` token (green-600 light, green-500 dark, mirroring `--destructive`): `text-success`, `bg-success/10`, `border-success/20`. It is foreground-less, like `--destructive`.
 

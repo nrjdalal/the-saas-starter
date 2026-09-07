@@ -33,16 +33,22 @@ Ready when the health curl prints `"message":"ok"` and `/` returns `200`. `bunx 
 The API dev task runs `bun --hot src/index.ts`, and **`--hot` does not pick up newly created files** (new routers, new schema exports). The symptom is a route that exists in source returning `{"error":{"code":"NOT_FOUND"}}`. Touching files does not clear it; only a full restart does:
 
 ```bash
-pkill -f "turbo run dev" 2>/dev/null
+# The survivors and their working directory: kill only the ones in THIS checkout
+for p in $(pgrep -f "turbo run dev|next dev|next-server|src/index.ts|tsdown --watch|portless.ts"); do
+  echo "$p $(lsof -a -p "$p" -d cwd -Fn 2>/dev/null | grep ^n | cut -c2-)"
+done
+kill -9 <the pids whose directory is this worktree>
 sleep 2
 (bun run dev --ui stream > /tmp/zerostarter-dev.log 2>&1 &)
 API=$(bunx portless get api.zerostarter)
 curl -sf --retry 60 --retry-delay 1 --retry-connrefused "$API/api/health" > /dev/null
 ```
 
-`pkill -f "turbo run dev"` matches any turbo dev process regardless of worktree; the shared portless proxy keeps running, and this worktree's apps re-register on restart. Before restarting, confirm no other worktree needs the turbo process you are killing. Done when the previously-NOT_FOUND route responds.
+Killing turbo alone is not enough: `pkill -f "turbo run dev"` matches the two turbo processes and none of the ten or so children they spawned, and a surviving `next-server` keeps its port, so the next `bun run dev` dies with "Another next dev server is already running". It is also worktree-blind, so it would take down another worktree's stack. Hence listing by working directory and killing by PID. The shared portless proxy keeps running either way, and this worktree's apps re-register on restart; `bunx portless list` showing no route for this branch confirms the old stack is gone. Done when the previously-NOT_FOUND route responds.
 
 Restart the same way after changing `@packages/*` exports the API consumes: they resolve to built dist, so run `bunx turbo run build --filter=@packages/<name>` first.
+
+`/api/health` can report a build SHA one commit behind `HEAD` after a restart. The SHA is baked into `@packages/env` at build time (`packages/env/tsdown.config.ts` reads `git rev-parse --short HEAD`), and turbo replays a cached build when only the commit changed, since the version in the root `package.json` is that task's only extra input. Force it with `bunx turbo run build --filter=@packages/env --force`; the number itself is right either way.
 
 ## Agent login
 

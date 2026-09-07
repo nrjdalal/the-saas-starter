@@ -127,11 +127,11 @@ Write any generated-but-disposable artifact to the repo-root `.generated/` dir (
 1. `bun install` from the repo root to link the new workspace (a fresh worktree also needs this before the pre-commit build; set `NODE_ENV=production SKIP_ENV_VALIDATION=true`).
 2. In each consumer, add `"@packages/<name>": "workspace:*"` (a runtime `dependency` for a library, a `devDependency` for a build-only package) and import via `@packages/<name>` (or a subpath export).
 3. Runtime code follows the `runtime-apis` skill: Bun-native APIs where they exist, else `node:`-prefixed built-ins.
-4. Verify: `bunx turbo run check-types build test` is green and the new package appears in the run.
+4. Verify: `bunx turbo run check-types build` and `bun run test` are green and the new package appears in the run.
 
 ## Keep docs in sync
 
-Adding a package touches the map. In the same change, update: the `packages/*` list in `AGENTS.md`/`CLAUDE.md`; both structure trees, `README.md` (`## Monorepo Structure`) and `web/next/content/docs/getting-started/project-structure.mdx` (its frontmatter/intro package count, the tree, and the "The packages" list); the `codebase-map` skill; and any skill whose globs name package paths (e.g. `runtime-apis`). A fork keeps build-only packages like `scripts` (unlike `cli`, which `init` strips), so they belong in the user-facing trees too. See the `doc-sync` skill.
+Adding a package touches the map. In the same change, update: the `packages/*` list in `AGENTS.md`/`CLAUDE.md`; both structure trees, `README.md` (`## Monorepo Structure`) and `web/next/content/docs/getting-started/project-structure.mdx` (the tree and the "The packages" list); the `codebase-map` skill; and any skill whose globs name package paths (e.g. `runtime-apis`). A fork keeps build-only packages like `scripts` (unlike `cli`, which `init` strips), so they belong in the user-facing trees too. See the `doc-sync` skill.
 
 ## Gotchas
 
