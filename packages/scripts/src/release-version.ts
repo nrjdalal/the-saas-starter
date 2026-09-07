@@ -41,8 +41,10 @@ export const compare = (a: string, b: string): number => {
   return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]
 }
 
-// The version one change up from another, as changelogen's bump command moves it: below 1.0 a major counts as a minor and a minor as a patch.
-export const bump = (version: string, change: SemverBumpType): string => {
+type Step = Extract<SemverBumpType, "major" | "minor" | "patch">
+
+// The version one change up from another, as changelogen's bumpVersion moves it: below 1.0 a major counts as a minor and a minor as a patch.
+export const bump = (version: string, change: Step): string => {
   const [major, minor, patch] = parse(version)
   const step = major > 0 ? change : change === "major" ? "minor" : "patch"
   if (step === "major") return `${major + 1}.0.0`
@@ -107,7 +109,7 @@ export const writeVersion = async (file: string, version: string): Promise<void>
   )
 }
 
-// What the window since the tag has earned on top of the tag's version. The commits are the ones changelogen's own command keeps for the changelog (its config from changelog.config.json, the type lowercased as its parser is case-insensitive, disabled types and non-breaking chore(deps) dropped), so a window that keeps none earns nothing, which is the entry auto-release's content gate demands; the change is its semver reading of them, falling back to the patch its command bumps when no commit says more.
+// What the window since the tag has earned on top of the tag's version, read the way changelogen's own command reads it. Its default command keeps a commit for the changelog when its lowercased type is enabled in the config and it is not a non-breaking chore(deps); the one deliberate difference is that the type must be the config's own key, since a name inherited from Object.prototype (a "constructor:" title) passes the command's lookup and crashes it further on. A window that keeps nothing earns nothing, which is the entry auto-release's content gate demands.
 const earnedFrom = async (root: string, tag: string | null): Promise<string> => {
   const from = tag === null ? undefined : tag
   const config = await loadChangelogConfig(root, { cwd: root, from, to: "HEAD" })
@@ -115,11 +117,17 @@ const earnedFrom = async (root: string, tag: string | null): Promise<string> => 
     .map((commit) => ({ ...commit, type: commit.type.toLowerCase() }))
     .filter(
       (commit) =>
+        Object.hasOwn(config.types, commit.type) &&
         config.types[commit.type] &&
         !(commit.type === "chore" && commit.scope === "deps" && !commit.isBreaking),
     )
   if (kept.length === 0) return baseOf(tag)
-  return bump(baseOf(tag), determineSemverChange(kept, config) ?? "patch")
+  // Its bumpVersion falls back to a patch when no kept commit carries a semver, and only ever reads major, minor, or patch out of them; anything else here is a changelogen that changed shape.
+  const change = determineSemverChange(kept, config) ?? "patch"
+  if (change !== "major" && change !== "minor" && change !== "patch") {
+    throw new Error(`changelogen read an unexpected change from the window: ${change}`)
+  }
+  return bump(baseOf(tag), change)
 }
 
 // The last v* tag HEAD can reach, or null for a repository with no tag yet. git describe fails the same way for a repository with no tag and for one whose tags HEAD cannot reach (a shallow clone without them); only the first is a fresh start, the second would compute from v0.0.0 and answer wrong, so it stops here.

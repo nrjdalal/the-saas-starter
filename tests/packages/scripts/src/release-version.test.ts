@@ -83,6 +83,7 @@ const repo = async (version: string): Promise<string> => {
   await Bun.$`git init -q -b canary ${dir}`
   await Bun.$`git -C ${dir} config user.email probe@example.com`
   await Bun.$`git -C ${dir} config user.name probe`
+  // changelogen's config loader reads the remote URL to resolve the repository; without one it prints a git error for every decision.
   await Bun.$`git -C ${dir} remote add origin https://github.com/probe/probe.git`
   // The changelog config rides along, as it does in this repo and in a fork: it is what drops ci commits, which the decision reads the way the content gate does.
   await Bun.write(
@@ -159,6 +160,17 @@ describe("decideIn, against real repositories", () => {
     try {
       await commit(dir, "chore: release", "v0.1.27")
       await commit(dir, "wip, not a conventional message")
+      expect(await decideIn(dir)).toMatchObject({ earned: "0.1.27", moved: false })
+    } finally {
+      cleanup(dir)
+    }
+  }, 30000)
+
+  test("a type the config only inherits from Object.prototype earns nothing", async () => {
+    const dir = await repo("0.1.27")
+    try {
+      await commit(dir, "chore: release", "v0.1.27")
+      await commit(dir, "constructor: exotic")
       expect(await decideIn(dir)).toMatchObject({ earned: "0.1.27", moved: false })
     } finally {
       cleanup(dir)
