@@ -109,7 +109,7 @@ export const writeVersion = async (file: string, version: string): Promise<void>
   )
 }
 
-// What the window since the tag has earned on top of the tag's version, read the way changelogen's own command reads it. Its default command keeps a commit for the changelog when its lowercased type is enabled in the config and it is not a non-breaking chore(deps); the one deliberate difference is that the type must be the config's own key, since a name inherited from Object.prototype (a "constructor:" title) passes the command's lookup and crashes it further on. A window that keeps nothing earns nothing, which is the entry auto-release's content gate demands.
+// What the window since the tag has earned on top of the tag's version. changelogen's default command keeps a commit for the changelog when its lowercased type is enabled in the config and it is not a non-breaking chore(deps); the one deliberate difference is that the type must be the config's own key, since a name inherited from Object.prototype (a "constructor:" title) passes the command's lookup and crashes it further on. A window that keeps nothing earns nothing, which is the entry auto-release's content gate demands.
 const earnedFrom = async (root: string, tag: string | null): Promise<string> => {
   const from = tag === null ? undefined : tag
   const config = await loadChangelogConfig(root, { cwd: root, from, to: "HEAD" })
