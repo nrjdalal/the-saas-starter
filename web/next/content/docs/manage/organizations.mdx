@@ -11,7 +11,7 @@ The starter wires the two flows a product needs on day one, creating an organiza
 
 ## The data model
 
-Five tables in `packages/db/src/schema/auth.ts` hold the tenancy, all cascading on delete:
+Five tables in `packages/db/src/schema/auth.ts` hold the tenancy, cascading from their organization or team on delete (`invitation.teamId` carries no foreign key):
 
 | Table          | Holds                                                                                   |
 | -------------- | --------------------------------------------------------------------------------------- |

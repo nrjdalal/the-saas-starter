@@ -46,7 +46,14 @@ bun run format:check  # oxfmt, report only (also what CI runs)
 pre-commit:
   piped: true
   commands:
+    skills-manager:
+      priority: 1
+      glob:
+        - ".agents/skills/**/*.md"
+        - ".github/scripts/skills-manager.ts"
+      run: bun .github/scripts/skills-manager.ts && git add AGENTS.md
     lint-staged:
+      priority: 2
       run: bunx lint-staged --verbose
       stage_fixed: true
     build:
@@ -68,7 +75,7 @@ pre-push:
       run: bun .github/scripts/ensure-remote-branches.ts {1}
 ```
 
-**pre-commit**: [lint-staged](https://github.com/lint-staged/lint-staged) formats then lints only your staged files (`oxfmt`, then `oxlint`); `stage_fixed: true` re-stages anything the formatter rewrote, so the fix rides along in the same commit. Then a full `bun run build` has to pass. A commit that lands is formatted, linted, and building.
+**pre-commit**: when a skill changed, `skills-manager` regenerates the AGENTS.md skills tables first. Then [lint-staged](https://github.com/lint-staged/lint-staged) formats then lints only your staged files (`oxfmt`, then `oxlint`); `stage_fixed: true` re-stages anything the formatter rewrote, so the fix rides along in the same commit. Then a full `bun run build` has to pass. A commit that lands is formatted, linted, and building.
 
 **commit-msg**: [Commitlint](https://commitlint.js.org) checks the message against Conventional Commits (below).
 
