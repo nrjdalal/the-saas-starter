@@ -38,7 +38,7 @@ rg -n "<changed-path-or-command>" web/next/content/docs README.md AGENTS.md .age
 
 Fix each hit in the same change. Two couplings are easy to miss:
 
-- **Adding or removing a skill** touches two places: the `AGENTS.md` skills table (generated, so run `bun .github/scripts/skills-manager.ts`) and the `resources/ai-skills.mdx` catalog row.
+- **Adding or removing a skill** touches the `AGENTS.md` skills table (generated, so run `bun .github/scripts/skills-manager.ts`) and the `resources/ai-skills.mdx` catalog row. A vendored one also touches `skills-lock.json` and that page's count of how many skills are vendored.
 - **Adding, removing, or renaming a doc page** touches `web/next/docs.config.ts`, not the `.mdx` alone.
 
 ## 4. Verify with the repo's own drift gate

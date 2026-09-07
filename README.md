@@ -56,7 +56,7 @@ Every item below is wired and working out of the box, not just a dependency in `
     └── cli/       # The `zerostarter` npm binary: init, reinit, sync (stripped from a fork)
 ```
 
-Two deployable apps (`api/hono` and `web/next`) and shared `packages/*` (auth, config, db, env, scripts). Brand identity lives in one place, `@packages/config/site`, so a fork rebrands by editing a single file.
+Two deployable apps (`api/hono` and `web/next`), shared `packages/*` (auth, config, db, env, scripts), and the `cli` that scaffolds a fork. Brand identity lives in one place, `@packages/config/site`, so a fork rebrands by editing a single file.
 
 📖 **[Full project structure →](https://zerostarter.dev/docs/getting-started/project-structure)**
 

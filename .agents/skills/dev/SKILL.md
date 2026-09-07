@@ -36,7 +36,7 @@ The API dev task runs `bun --hot src/index.ts`, and **`--hot` does not pick up n
 # Kill this checkout's dev processes: turbo, plus the children it leaves behind.
 # A linked worktree lives under the primary checkout, so its stack is skipped by path.
 ROOT=$(git rev-parse --show-toplevel)
-for p in $(pgrep -f "turbo run dev|next dev|next-server|src/index.ts|tsdown --watch|portless.ts"); do
+for p in $(pgrep -f "turbo run dev|bun run dev|dev:app|next dev|next-server|src/index.ts|tsdown|portless"); do
   cwd=$(lsof -a -p "$p" -d cwd -Fn 2>/dev/null | grep ^n | cut -c2-)
   case "$cwd" in
     "$ROOT"/.claude/worktrees/*) ;;
@@ -49,7 +49,7 @@ API=$(bunx portless get api.zerostarter)
 curl -sf --retry 60 --retry-delay 1 --retry-connrefused "$API/api/health" > /dev/null
 ```
 
-Killing turbo alone is not enough: `pkill -f "turbo run dev"` matches the two turbo processes and none of the ten or so children they spawned, and a surviving `next-server` keeps its port, so the next `bun run dev` dies with "Another next dev server is already running". It is also worktree-blind, so it would take down another worktree's stack. Hence matching on each process's own working directory instead. The shared portless proxy keeps running either way, and this worktree's apps re-register on restart; `bunx portless list` showing no route for this branch confirms the old stack is gone. Done when the previously-NOT_FOUND route responds.
+Killing turbo alone is not enough: a running stack is around 19 processes, `pkill -f "turbo run dev"` matches two of them, and the survivors include both `next-server`, which keeps its port so the next `bun run dev` dies with "Another next dev server is already running", and the two `.bin/portless` supervisors that hold the route registration. It is also worktree-blind, so it would take down another worktree's stack. Hence the wide pattern, narrowed by each process's own working directory. The shared portless proxy keeps running either way, and this worktree's apps re-register on restart; `bunx portless list` showing no route for this branch confirms the old stack is gone. Done when the previously-NOT_FOUND route responds.
 
 Restart the same way after changing `@packages/*` exports the API consumes: they resolve to built dist, so run `bunx turbo run build --filter=@packages/<name>` first.
 
