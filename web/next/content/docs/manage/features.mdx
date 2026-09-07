@@ -1,7 +1,7 @@
 ---
 slug: /docs/manage/features
 title: Features
-description: Toggle optional surfaces (docs, blog, API reference, waitlist) from one config, chosen at init and flippable anytime.
+description: Toggle optional surfaces (allowlist, docs, blog, API reference, internal docs, waitlist) from one config, chosen at init and flippable anytime.
 ---
 
 Not every product wants a public blog, a docs site, or a waitlist. ZeroStarter makes each optional surface a **feature flag**: one boolean in config that turns the whole surface on or off. The starter ships with every feature on (it demos them all); a fork picks its set at `init` and can change it at any time.
@@ -21,20 +21,20 @@ export const features = {
 }
 ```
 
-| Flag           | Surface                                                                                       | Off means                                                                                                                     |
-| -------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `allowlist`    | Console > Access > Allowlist, `/api/v1/admin/allowlist*`, and the console grant it drives     | the page and the API 404, the nav drops it, and console access is granted per person only                                     |
-| `apiDocs`      | `/api/docs` Scalar reference UI + the `/api/openapi.json` spec                                | both 404 and the navbar "API Docs" link is hidden                                                                             |
-| `blog`         | `/blog` and its posts                                                                         | `/blog` 404s, the navbar link, `/og/blog`, sitemap, and `llms.txt` blog entries all drop                                      |
-| `docs`         | `/docs`                                                                                       | `/docs` 404s, the navbar link, `/og/docs`, search (`/api/search`), sitemap, and `llms.txt` docs entries all drop              |
-| `internalDocs` | `/console/docs` (internal docs, member and above)                                             | the console docs render the not-found page and their search (`/api/console/search`) 404s                                      |
-| `waitlist`     | `/waitlist` page and its API, plus Console > Waitlist > Signups and `/api/v1/admin/waitlist*` | `/waitlist`, `/api/waitlist` and the console page 404, the nav drops it, and a fresh fork's home becomes a plain landing page |
+| Flag           | Surface                                                                                       | Off means                                                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allowlist`    | Console > Access > Allowlist, `/api/v1/admin/allowlist*`, and the console grant it drives     | the API 404s, the console page renders the not-found, the nav drops it, and console access is granted per person only                               |
+| `apiDocs`      | `/api/docs` Scalar reference UI + the `/api/openapi.json` spec                                | both 404 and the navbar "API Docs" link is hidden                                                                                                   |
+| `blog`         | `/blog` and its posts                                                                         | `/blog` 404s, the navbar link, `/og/blog`, sitemap, and `llms.txt` blog entries all drop                                                            |
+| `docs`         | `/docs`                                                                                       | `/docs` 404s, the navbar link, `/og/docs`, search (`/api/search`), sitemap, and `llms.txt` docs entries all drop                                    |
+| `internalDocs` | `/console/docs` (internal docs, member and above)                                             | the console docs render the not-found page and their search (`/api/console/search`) 404s                                                            |
+| `waitlist`     | `/waitlist` page and its API, plus Console > Waitlist > Signups and `/api/v1/admin/waitlist*` | `/waitlist` and `/api/waitlist` 404, the console page renders the not-found, the nav drops it, and a fresh fork's home becomes a plain landing page |
 
 "Off" is not a stub: the route returns a real 404, the links and navigation entries disappear, and the surface is dropped from the sitemap, `llms.txt`, and search, so nothing points at a page that no longer exists.
 
-<Callout type="info" title="One soft 404">
+<Callout type="info" title="Soft 404s in the console">
 
-The console area is `force-dynamic` (its gate runs per request), and Next commits a 200 status before a page-level `notFound()` fires mid-stream, so a disabled `/console/docs` renders the not-found page with an HTTP 200, not a 404. The same is true of any unknown console path, which a catch-all routes into the same boundary on purpose, so a forbidden page and a nonexistent one cannot be told apart. The area is gated and `noindex` with no content leak, and the console docs search still returns a hard 404. Every other disabled surface returns a real 404.
+The console area is `force-dynamic` (its gate runs per request), and Next commits a 200 status before a page-level `notFound()` fires mid-stream, so a disabled console page renders the not-found page with an HTTP 200, not a 404. The same is true of any unknown console path, which a catch-all routes into the same boundary on purpose, so a forbidden page and a nonexistent one cannot be told apart. The area is gated and `noindex` with no content leak, and the console docs search still returns a hard 404. Every disabled page inside the console behaves this way; every disabled surface outside it returns a real 404.
 
 </Callout>
 
@@ -61,7 +61,7 @@ bunx zerostarter init my-app --no-blog --waitlist
 bunx zerostarter init my-app
 ```
 
-The fork defaults are **docs, blog, internal docs, and the API reference on; the waitlist off** (so a fresh fork lands on a plain home). Skipping the picker keeps those defaults. `--yes` takes them without prompting.
+The fork defaults are **docs, blog, internal docs, and the API reference on; the waitlist and the allowlist off** (so a fresh fork lands on a plain home). Skipping the picker keeps those defaults. `--yes` takes them without prompting.
 
 ## Enable anytime
 

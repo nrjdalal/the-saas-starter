@@ -60,7 +60,10 @@ const onVercel = process.env.VERCEL === "1"
 
 ```tsx
 <body className="min-h-svh">
-  <InnerProvider>{children}</InnerProvider>
+  <InnerProvider>
+    <Navbar />
+    {children}
+  </InnerProvider>
   {onVercel && <SpeedInsights />}
 </body>
 ```
