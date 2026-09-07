@@ -19,8 +19,9 @@ Hand-authored, keep each in step with the code:
 | `README.md` | top-level story: stack, structure, quick start, scripts, deployment | the stack, setup, scripts, or pitch changes |
 | `.agents/skills/<name>/SKILL.md` | one task procedure each (canonical; `.claude` and `.github` symlink in) | a command, path, convention, or tooling a skill encodes changes, or a skill is added or removed |
 | `AGENTS.md` (`CLAUDE.md` symlinks in) | the rules and the skills catalog table | a rule changes, or the skill set changes |
+| `packages/config/src/site.ts` | the brand, the feature flags, and the hand-written preamble served at the top of `/llms-full.txt` | the layout, the route groups, the packages, or the API surface it describes changes |
 
-Generated, never hand-edit (they regenerate from the surfaces above): `content/docs/meta.json` (git-ignored), the `/llms.txt` and `/llms-full.txt` routes, and the fumadocs search index.
+Generated, never hand-edit (they regenerate from the surfaces above): `content/docs/meta.json` (git-ignored), the `/llms.txt` and `/llms-full.txt` routes, and the fumadocs search index. The one hand-written part of those routes is the `/llms-full.txt` preamble, which lives in `site.ts` above.
 
 ## 1. Scope the change
 
@@ -38,7 +39,7 @@ rg -n "<changed-path-or-command>" web/next/content/docs README.md AGENTS.md .age
 
 Fix each hit in the same change. Two couplings are easy to miss:
 
-- **Adding or removing a skill** touches three places: the `AGENTS.md` skills table, the `resources/ai-skills.mdx` catalog row, and that file's "N skills" counts.
+- **Adding or removing a skill** touches the `AGENTS.md` skills table (generated, so run `bun .github/scripts/skills-manager.ts`) and the `resources/ai-skills.mdx` catalog row. A vendored one also touches `skills-lock.json` and that page's count of how many skills are vendored.
 - **Adding, removing, or renaming a doc page** touches `web/next/docs.config.ts`, not the `.mdx` alone.
 
 ## 4. Verify with the repo's own drift gate

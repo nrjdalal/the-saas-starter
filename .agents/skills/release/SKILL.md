@@ -6,7 +6,7 @@ source: local
 
 # Release
 
-Releases ship by promoting `canary` to `main`. Everything downstream (version bump, changelog, tag, GitHub release) is automated by `.github/workflows/auto-release.yml`; cutting a release is one deliberate merge, because `main` deploys to production.
+Releases ship by promoting `canary` to `main`. The release number is decided before the merge by `.github/workflows/auto-canary-into-main.yml`; everything after it (changelog, tag, GitHub release) is automated by `.github/workflows/auto-release.yml`, and `.github/workflows/cli-release.yml` publishes the CLI, from the tag once the release is cut and as a `canary` prerelease on pushes before it; cutting a release is one deliberate merge, because `main` deploys to production.
 
 ## How it works
 
