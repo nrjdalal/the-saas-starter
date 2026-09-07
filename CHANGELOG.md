@@ -1,3 +1,15 @@
+## v0.1.29
+
+[compare changes](https://github.com/nrjdalal/zerostarter/compare/v0.1.28...v0.1.29)
+
+### 🩹 Fixes
+
+- **scripts:** Compute the release number with changelogen's library ([#828](https://github.com/nrjdalal/zerostarter/pull/828))
+
+### ❤️ Contributors
+
+- Neeraj Dalal @nrjdalal
+
 ## v0.1.28
 
 [compare changes](https://github.com/nrjdalal/zerostarter/compare/v0.1.27...v0.1.28)
