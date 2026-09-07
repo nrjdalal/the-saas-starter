@@ -26,14 +26,14 @@ The route sends a snapshot on open and clears its heartbeat on close, which fire
 app.basePath("/api").get(
   "/health/ws",
   upgradeWebSocket(() => {
-    let heartbeat: ReturnType<typeof setInterval>
+    let heartbeat: ReturnType<typeof setInterval> | null = null
     return {
       onOpen(_event, ws) {
         ws.send(snapshot())
         heartbeat = setInterval(() => ws.send(snapshot()), 5000)
       },
       onClose() {
-        clearInterval(heartbeat)
+        if (heartbeat) clearInterval(heartbeat)
       },
     }
   }),

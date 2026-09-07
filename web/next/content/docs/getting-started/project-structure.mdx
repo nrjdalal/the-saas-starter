@@ -26,7 +26,7 @@ Three import aliases wire it together: `@api/hono` gives the frontend its API ty
 
 ## `api/hono`
 
-The entry point is `src/index.ts`, which exports the `AppType` the frontend infers from. Routes live in `src/routers/` (auth, the local-only `agents` sign-in, protected `v1`, public `waitlist`), middleware in `src/middlewares/` (auth, rate limiting), and `src/lib/error.ts` holds the `onError` switchboard that shapes every failure into the `{ error: { code, message } }` envelope.
+The entry point is `src/index.ts`, which exports the `AppType` the frontend infers from. Routes live in `src/routers/` (auth, the local-only `agents` sign-in, protected `v1` with the console-only `admin` mounted under it, public `waitlist`), middleware in `src/middlewares/` (auth, console access, feature gating, rate limiting), and `src/lib/error.ts` holds the `onError` switchboard that shapes every failure into the `{ error: { code, message } }` envelope.
 
 ## `web/next`
 
