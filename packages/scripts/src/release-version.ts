@@ -41,10 +41,10 @@ export const compare = (a: string, b: string): number => {
   return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]
 }
 
-type Step = Extract<SemverBumpType, "major" | "minor" | "patch">
+type SemverStep = Extract<SemverBumpType, "major" | "minor" | "patch">
 
 // The version one change up from another, as changelogen's bumpVersion moves it: below 1.0 a major counts as a minor and a minor as a patch.
-export const bump = (version: string, change: Step): string => {
+export const bump = (version: string, change: SemverStep): string => {
   const [major, minor, patch] = parse(version)
   const step = major > 0 ? change : change === "major" ? "minor" : "patch"
   if (step === "major") return `${major + 1}.0.0`

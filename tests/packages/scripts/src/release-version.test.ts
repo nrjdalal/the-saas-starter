@@ -12,7 +12,7 @@ import {
   writeVersion,
 } from "../../../../packages/scripts/src/release-version"
 
-// The pure decision, then the whole script against throwaway git repositories shaped like each stage of a project: a fresh fork with no tag, a steady-state window, a window that turns breaking halfway, a window of nothing but mechanical commits, a hand-set ahead of everything, a tree already moved forward, and a tree below the last tag. The repositories are real so changelogen's own parsing reads real commits, and one scenario runs changelogen's command beside the script to keep the two agreeing.
+// The pure decision and the bump rule, then the whole script against throwaway git repositories shaped like each stage of a project: a fresh fork with no tag, a steady-state window, a window that turns breaking halfway, windows of nothing but mechanical commits or one non-conventional message, a window whose types changelogen drops or only inherits from Object.prototype, a shouted type, a hand-set ahead of everything, a tree already moved forward, a tree below the last tag, and tags HEAD cannot reach. The repositories are real so changelogen's own parsing reads real commits, and one scenario runs changelogen's command beside the script to keep the two agreeing.
 
 describe("compare", () => {
   test("orders numeric semver by major, then minor, then patch", () => {
